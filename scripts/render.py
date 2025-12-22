@@ -91,15 +91,15 @@ def render_template(template_name: str, context: dict[str, Any]) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile", default=None)
-    parser.add_argument("--format", choices=("md", "typst"), required=True)
+    parser.add_argument("--format", choices=("md", "typst", "html"), required=True)
     parser.add_argument("--output", required=True)
     args = parser.parse_args(argv)
 
     data = load_data(DATA_FILE)
     validate(data)
 
-    if args.format == "md":
-        # Markdown includes all bullets; include all available sections
+    # Common context for md and html
+    if args.format in ("md", "html"):
         ctx = {
             "experiences": data.get("experiences", []),
             "projects": data.get("projects", []),
@@ -107,32 +107,24 @@ def main(argv: list[str] | None = None) -> int:
             "skills": data.get("skills", []),
             "personal": data.get("personal", {}),
         }
-        out = render_template("resume.md.tmpl", ctx)
-        Path(args.output).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.output).write_text(out, encoding="utf-8")
-        return 0
-
-    # typst requires a profile and supports the same sections; experiences are filtered by profile
-    if args.format == "typst":
+        template = f"resume.{args.format}.tmpl"
+    elif args.format == "typst":
         if not args.profile:
             raise SystemExit("Missing --profile for typst output")
         filtered = apply_profile(data, args.profile)
-        list_sections = {
-            "experiences": filtered,
-            "projects": data,
-            "education": data,
-            "skills": data,
-            "publications": data,
+        ctx = {
+            "personal": data.get("personal", {}),
+            "experiences": filtered.get("experiences", []),
+            "projects": data.get("projects", []),
+            "education": data.get("education", []),
+            "skills": data.get("skills", []),
+            "publications": data.get("publications", []),
         }
+        template = "resume.typ.tmpl"
 
-        ctx = {"personal": data.get("personal", {})}
-        for section, source in list_sections.items():
-            ctx[section] = source.get(section, [])
-        out = render_template("resume.typ.tmpl", ctx)
-        Path(args.output).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.output).write_text(out, encoding="utf-8")
-        return 0
-
+    out = render_template(template, ctx)
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.output).write_text(out, encoding="utf-8")
     return 0
 
 
