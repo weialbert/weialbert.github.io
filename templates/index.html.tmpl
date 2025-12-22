@@ -41,4 +41,31 @@
       color: white;
       text-decoration: none;
       padding: 15px 30px;
-      background: linear-gradient(135deg
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      display: block;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Albert Wei's Resume</h1>
+    <p>In the following flavors:</p>
+    <div class="links">
+      <a href="resume.pdf">View PDF Resume</a>
+      <a href="resume.html" class="secondary">View HTML Resume</a>
+      <a href="resume.md" class="secondary">View Markdown Source</a>
+    </div>
+  </div>
+</body>
+</html>
