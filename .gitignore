@@ -1,6 +1,17 @@
-# Ignore build metadata and local env artifacts
-resume.egg-info/
+# Build outputs
+build/
+
+# Python
 __pycache__/
-*.pyc
-.venv/
+*.py[cod]
+*.egg-info/
 .setup-done
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+
+# OS files
+.DS_Store
+
