@@ -12,7 +12,28 @@ Prerequisites:
 Install Python deps:
 
 ```bash
-python -m pip install --user -r requirements.txt
+# Install uv (recommended) and sync dependencies from pyproject.toml
+python -m pip install --user uv
+uv sync
+```
+
+Lockfile
+
+`uv.lock` is included in this repository to pin dependency versions for reproducible installs.
+To update or regenerate the lock run:
+
+```bash
+# Install or update uv, then generate lock
+python -m pip install --user uv
+uv lock
+# Commit the generated `uv.lock` file
+git add uv.lock && git commit -m "chore: update uv.lock"
+```
+
+If you prefer using pipx to install CLI tools:
+
+```bash
+pipx install uv
 ```
 
 Build (all):
