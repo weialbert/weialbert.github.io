@@ -21,8 +21,13 @@ build/resume.pdf: build/resume.typ
 .PHONY: all setup md pdf clean
 
 setup:
-	@echo "Ensuring Python deps (PyYAML, Jinja2) are installed to user site"
-	$(PY) -m pip install --user PyYAML Jinja2
+	@echo "Ensuring Python deps are installed (prefer uv)"
+	@if command -v uv >/dev/null 2>&1; then \
+		uv sync; \
+	else \
+		echo "uv not found — installing with pip to user site"; \
+		$(PY) -m pip install --user PyYAML Jinja2; \
+	fi
 
 md: setup build/resume.md
 
