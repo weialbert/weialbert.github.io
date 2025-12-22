@@ -32,25 +32,42 @@ education:
     location: "Ann Arbor, MI"
     degrees:
       - degree: "MSE Industrial & Operations Engineering – Operations Research"
-        start: 2022-01
-        end: 2022-12
-      - degree: "BSE Industrial & Operations Engineering; Minor: Computer Science Engineering"
-        start: 2018-09
-        end: 2021-12
-    gpa: "3.9 – Summa Cum Laude"
+        start: 2021
+        end: 2022
+        gpa: "3.9"
+      - degree: "BSE Industrial & Operations Engineering"
+        start: 2018
+        end: 2021
+        gpa: "3.9"
+        details:
+          - "Minor: Computer Science Engineering"
     awards:
+      - "Summa Cum Laude (2021, 2022)"
       - "Dean's List (2018–2022)"
       - "University Honors"
       - "James B. Angell Scholar"
 
 
 experiences:
+  - id: palantir
+    company: Palantir Technologies
+    role: Data Engineer
+    location: New York, NY
+    start: 2025
+    end: present
+    tags: [data-engineering, leadership]
+    bullets:
+      - id: p-b1
+        text: Migrated petabyte-scale production datasets to iceberg table format, optimizing storage costs by 40% and enabling real-time analytics capabilities for enterprise stakeholders
+        importance: 5
+        tags: [data-engineering, performance]
+
   - id: capital-one
     company: Capital One
     role: Senior Data Analyst
     location: McLean, VA
-    start: 2021-01
-    end: present
+    start: 2021
+    end: 2025
     tags: [data-engineering, leadership]
     bullets:
       - id: co-b1
@@ -84,10 +101,10 @@ experiences:
 
   - id: umich-tri
     company: University of Michigan – Transportation Research Institute
-    role: Research Scientist & First Author
+    role: Model Developer & First Author
     location: Ann Arbor, MI
-    start: 2018-01
-    end: 2021-12
+    start: 2018
+    end: 2021
     tags: [research]
     bullets:
       - id: tri-b1
@@ -107,8 +124,8 @@ experiences:
     company: Investment Metrics
     role: Data Products Intern
     location: Norwalk, CT
-    start: 2020-06
-    end: 2021-08
+    start: 2020
+    end: 2021
     tags: [internship]
     bullets:
       - id: im-b1
@@ -122,18 +139,18 @@ experiences:
 
   - id: umich-gsi
     company: University of Michigan – College of Engineering
-    role: Graduate Student Instructor / Instructional Assistant - Lean Manufacturing
+    role: Graduate Student Instructor - Lean Manufacturing
     location: Ann Arbor, MI
-    start: 2020-01
-    end: 2022-06
+    start: 2020
+    end: 2022
     tags: [teaching]
     bullets:
       - id: gsi-b1
-        text: Delivered full lecture series on Lean Six Sigma methodologies to 50+ students and hosted weekly labs and office hours
+        text: Delivered full lecture series on training for Lean Six Sigma certification to 50+ students
         importance: 2
         tags: [teaching, leadership]
       - id: gsi-b2
-        text: Developed lab materials and assessment tools and supported grading and student mentorship
+        text: Developed lab materials, assessment/grading tools, and supported student mentorship
         importance: 2
         tags: [education]
 
@@ -175,22 +192,22 @@ skills:
       - Git
       - Tableau
 
-projects:
-  - id: citywatch
-    name: CityWatch Incident Tracker
-    dates:
-      start: 2020-01
-      end: 2020-12
-    tech-used: "Next.js | Go | PostgreSQL"
-    url: "github.com/albert--wei/citywatch"
-    bullets:
-      - text: Developed incident reporting and response coordination system; implemented analytics dashboards; deployed via Docker and GitHub Actions.
-  - id: fleetops
-    name: FleetOps Manager
-    dates:
-      start: 2002-09
-      end: 2003-03
-    tech-used: "React | TypeScript | Node.js"
-    url: "github.com/albert--wei/fleetops"
-    bullets:
-      - text: Architected centralized platform for vehicle management and telemetry dashboards.
+# projects:
+#   - id: citywatch
+#     name: CityWatch Incident Tracker
+#     dates:
+#       start: 2020
+#       end: 2020
+#     tech-used: "Next.js | Go | PostgreSQL"
+#     url: "github.com/albert--wei/citywatch"
+#     bullets:
+#       - text: Developed incident reporting and response coordination system; implemented analytics dashboards; deployed via Docker and GitHub Actions.
+#   - id: fleetops
+#     name: FleetOps Manager
+#     dates:
+#       start: 2002
+#       end: 2003
+#     tech-used: "React | TypeScript | Node.js"
+#     url: "github.com/albert--wei/fleetops"
+#     bullets:
+#       - text: Architected centralized platform for vehicle management and telemetry dashboards.

@@ -3,3 +3,4 @@ resume.egg-info/
 __pycache__/
 *.pyc
 .venv/
+.setup-done

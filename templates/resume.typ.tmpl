@@ -1,9 +1,7 @@
 
 #let resume(
-  // Name of the author (you)
   author: "",
   author-position: center,
-  // Personal Information
   location: "",
   email: "",
   phone: "",
@@ -11,7 +9,7 @@
   github: "",
   portfolio: "",
   personal-info-position: center,
-  // Document values and format
+
   color-enabled: true,
   text-color: "#000080",
   font: "New Computer Modern",
@@ -21,10 +19,8 @@
   lang: "en",
   body,
 ) = {
-  // Sets document metadata
   set document(author: author, title: author)
 
-  // Document-wide formatting, including font and margins
   set text(
     font: font,
     size: font-size,
@@ -36,14 +32,10 @@
     paper: paper,
   )
 
-  // Accent Color Styling
   show heading: set text(fill: if color-enabled { rgb(text-color) } else { black })
   show link: set text(fill: if color-enabled { rgb(text-color) } else { blue })
-
-  // Link styles
   show link: underline
 
-  // Name will be aligned to center, bold and big
   show heading.where(level: 1): it => [
     #set align(author-position)
     #set text(
@@ -53,10 +45,8 @@
     #pad(it.body)
   ]
 
-  // Level 1 Heading
   [= #(author)]
 
-  // Personal Information
   let contact-item(value, prefix: "", link-type: "") = {
     if value != "" {
       if link-type != "" {
@@ -88,13 +78,11 @@
     #line(length: 100%, stroke: 1pt)
   ]
 
-  // Main body.
   set par(justify: true)
 
   body
 }
 
-// Components layout template
 #let one-by-one-layout(
   left: "",
   right: "",
@@ -110,19 +98,16 @@
   bottom-left: "",
   bottom-right: "",
 ) = {
-  [
-    #top-left #h(1fr) #top-right \
-    #bottom-left #h(1fr) #bottom-right
-  ]
+  grid(
+    columns: (3fr, 1fr),
+    column-gutter: 1em,
+    row-gutter: 0.5em,
+    align: (top + left, top + right),
+    top-left, top-right,
+    bottom-left, bottom-right
+  )
 }
 
-// Dates that can be use for components
-//
-// Example:
-//
-// Sep 2021 - Aug 2025 (end date is defined)
-//
-// Sep 2021 (if no end date defined)
 #let dates-util(
   start-date: "",
   end-date: "",
@@ -134,12 +119,7 @@
   }
 }
 
-// Resume components are listed below
-// If you want to add some additional components, please make a PR
-
-// Work Component
-//
-// Optional arguments: tech-used
+// Experience Component
 #let work(
   company: "",
   role: "",
@@ -165,7 +145,6 @@
 }
 
 // Project Component
-//
 // Optional arguments: tech-used
 #let project(
   name: "",
@@ -196,16 +175,19 @@
   dates: "",
 ) = {
   two-by-two-layout(
+
     top-left: strong(institution),
-    top-right: location,
+    top-right: dates,
     bottom-left: degree,
-    bottom-right: dates,
+    bottom-right: emph(location),
   )
 }
 
+// Final Output
 #show: resume.with(
   author: "{{ personal.name }}",
   author-position: center,
+
   // Personal information (optional)
   location: "{{ personal.location }}",
   email: "{{ personal.email }}",
@@ -214,6 +196,7 @@
   github: "{{ personal.github }}",
   portfolio: "{{ personal.portfolio }}",
   personal-info-position: center,
+
   // Document formatting defaults (override in data if desired)
   color-enabled: false,
   text-color: "#000080",
@@ -224,46 +207,23 @@
   lang: "en",
 )
 
-== Technical Skills
 
-{% for s in skills %}
-- *{{ s.category }}*: {{ s['items'] | join(', ') }}
-{% endfor %}
-
-== Projects
-
-{% for p in projects %}
-#project(
-  name: "{{ p.name }}",
-  dates: dates-util(start-date: "{{ p.dates.start }}", end-date: "{{ p.dates.end }}"),
-  tech-used: "{{ p['tech-used'] }}",
-  url: "{{ p.url }}",
-)
-{% for b in p.bullets %}
-- {{ b.text }}
-{% endfor %}
-
-{% endfor %}
-
+{% if education %}
 == Education
-
 {% for e in education %}
 #edu(
   institution: "{{ e.institution }}",
   location: "{{ e.location }}",
-  degree: "{% for d in e.degrees %}{{ d.degree }}{% if not loop.last %} / {% endif %}{% endfor %}",
+  degree: "{% for d in e.degrees %}{{ d.degree }}{% if not loop.last %} \n{% endif %}{% endfor %}",
   dates: dates-util(start-date: "{{ e.degrees[0].start }}", end-date: "{{ e.degrees[-1].end }}"),
 )
-{% if e.gpa %}
-- *{{ e.gpa }}*
-{% endif %}
-{% if e.awards %}
-- Awards: {{ e.awards | join(', ') }}
-{% endif %}
+{% if e.awards %} - Awards: {{ e.awards | join(', ') }} {% endif %}
 {% endfor %}
+{% endif %}
 
+
+{% if experiences %}
 == Experience
-
 {% for exp in experiences %}
 #work(
   company: "{{ exp.company }}",
@@ -275,5 +235,37 @@
 {% for b in exp.bullets %}
 - {{ b.text }}
 {% endfor %}
-
 {% endfor %}
+{% endif %}
+
+
+{% if projects %}
+== Projects
+{% for p in projects %}
+#project(
+  name: "{{ p.name }}",
+  dates: dates-util(start-date: "{{ p.dates.start }}", end-date: "{{ p.dates.end }}"),
+  tech-used: "{{ p['tech-used'] }}",
+  url: "{{ p.url }}",
+)
+{% for b in p.bullets %}
+- {{ b.text }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+
+{% if publications %}
+== Publications
+{% for p in publications %}
+- {{ p.title }}, {{ p.authors | join(', ') }}, {{ p.journal }} ({{ p.year }})
+{% endfor %}
+{% endif %}
+
+
+{% if skills %}
+== Technical Skills
+{% for s in skills %}
+- *{{ s.category }}*: {{ s['items'] | join(', ') }}
+{% endfor %}
+{% endif %}
