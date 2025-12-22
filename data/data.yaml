@@ -19,20 +19,24 @@ config:
 
 personal:
   name: "Albert Wei"
-  location: "Ann Arbor, MI"
+  location: "New York, NY"
   email: "alwei@umich.edu"
   phone: "(203) 529-7086"
   linkedin: "linkedin.com/in/albert--wei"
-  github: "github.com/albert--wei"
+  github: "github.com/weialbert"
   portfolio: ""
 
 
 education:
   - institution: "University of Michigan"
     location: "Ann Arbor, MI"
-    degree: "MSE Industrial & Operations Engineering – Operations Research; BSE Industrial & Operations Engineering; Minor: Computer Science Engineering"
-    start: 2018-09
-    end: 2022-06
+    degrees:
+      - degree: "MSE Industrial & Operations Engineering – Operations Research"
+        start: 2022-01
+        end: 2022-12
+      - degree: "BSE Industrial & Operations Engineering; Minor: Computer Science Engineering"
+        start: 2018-09
+        end: 2021-12
     gpa: "3.9 – Summa Cum Laude"
     awards:
       - "Dean's List (2018–2022)"
