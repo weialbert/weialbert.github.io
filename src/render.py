@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import os
+from datetime import datetime
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -14,17 +17,23 @@ DATA_FILE = ROOT / "data" / "data.yaml"
 TEMPLATES_DIR = ROOT / "templates"
 
 
+class ValidationError(Exception):
+    """Raised when resume data validation fails."""
+
+
 def load_data(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
 def validate(data: dict[str, Any]) -> None:
+    """Validate resume data for consistency and constraints."""
     # Duplicate experience IDs
     ex_ids = [e["id"] for e in data.get("experiences", [])]
     dup = {x for x in ex_ids if ex_ids.count(x) > 1}
     if dup:
-        raise SystemExit(f'Duplicate experience id(s): {", ".join(sorted(dup))}')
+        msg = f'Duplicate experience id(s): {", ".join(sorted(dup))}'
+        raise ValidationError(msg)
 
     # Duplicate bullet IDs (global)
     bullets = []
@@ -33,7 +42,8 @@ def validate(data: dict[str, Any]) -> None:
             bullets.extend([b.get("id")])
     dup_b = {x for x in bullets if bullets.count(x) > 1}
     if dup_b:
-        raise SystemExit(f'Duplicate bullet id(s): {", ".join(sorted(dup_b))}')
+        msg = f'Duplicate bullet id(s): {", ".join(sorted(dup_b))}'
+        raise ValidationError(msg)
 
     # Bullet length
     max_len = data.get("config", {}).get("max_bullet_length", 1000)
@@ -41,13 +51,17 @@ def validate(data: dict[str, Any]) -> None:
         for b in e.get("bullets", []):
             text = b.get("text", "")
             if len(text) > max_len:
-                raise SystemExit(f"Bullet '{b.get('id')}' exceeds max length ({len(text)} > {max_len})")
+                bullet_id = b.get("id")
+                msg = f"Bullet '{bullet_id}' exceeds max length ({len(text)} > {max_len})"
+                raise ValidationError(msg)
 
 
 def apply_profile(data: dict[str, Any], profile_name: str) -> dict[str, Any]:
+    """Apply a profile to filter experiences and bullets."""
     profiles = data.get("profiles", {})
     if profile_name not in profiles:
-        raise SystemExit(f"Missing profile: {profile_name}")
+        msg = f"Missing profile: {profile_name}"
+        raise ValidationError(msg)
     profile = profiles[profile_name]
 
     def tag_pass(bul: dict[str, Any]) -> bool:
@@ -75,8 +89,9 @@ def apply_profile(data: dict[str, Any], profile_name: str) -> dict[str, Any]:
     return {**data, "experiences": out_exps}
 
 
-def render_template(template_name: str, context: dict[str, Any]) -> str:
-    env = Environment(
+def create_jinja_env() -> Environment:
+    """Create and configure Jinja2 environment."""
+    return Environment(
         loader=FileSystemLoader(str(TEMPLATES_DIR)),
         autoescape=select_autoescape(
             enabled_extensions=("html", "xml"),
@@ -84,6 +99,37 @@ def render_template(template_name: str, context: dict[str, Any]) -> str:
             default_for_string=False,
         ),
     )
+
+
+def get_build_info() -> dict[str, Any]:
+    """Get build information from environment variables."""
+    tag = os.environ.get("RELEASE_TAG", "dev")
+    commit = os.environ.get("GITHUB_SHA", "unknown")
+    commit_short = commit[:7] if commit != "unknown" else "unknown"
+    repo = os.environ.get("GITHUB_REPOSITORY", "weialbert/resume")
+
+    return {
+        "tag": tag,
+        "date": datetime.now(ZoneInfo("US/Eastern")).strftime("%Y-%m-%d %H:%M UTC"),
+        "commit_short": commit_short,
+        "commit_url": f"https://github.com/{repo}/commit/{commit}",
+        "release_url": f"https://github.com/{repo}/releases/tag/{tag}" if tag != "dev" else f"https://github.com/{repo}",
+    }
+
+
+def render_index(env: Environment, data: dict[str, Any]) -> str:
+    """Render index.html landing page with data from YAML."""
+    template = env.get_template("index.html.j2")
+    return template.render(
+        name=data["personal"]["name"],
+        title=data.get("title", ""),
+        contact=data.get("personal", {}),
+        build_info=get_build_info(),
+    )
+
+
+def render_template(env: Environment, template_name: str, context: dict[str, Any]) -> str:
+    """Render a template with the given context."""
     tmpl = env.get_template(template_name)
     return tmpl.render(**context)
 
@@ -91,15 +137,24 @@ def render_template(template_name: str, context: dict[str, Any]) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile", default=None)
-    parser.add_argument("--format", choices=("md", "typst", "html"), required=True)
+    parser.add_argument("--format", choices=("md", "typst", "html", "index"), required=True)
     parser.add_argument("--output", required=True)
     args = parser.parse_args(argv)
 
-    data = load_data(DATA_FILE)
-    validate(data)
+    try:
+        data = load_data(DATA_FILE)
+        validate(data)
+    except ValidationError:
+        return 1
 
+    # Create Jinja environment once
+    env = create_jinja_env()
+
+    # Handle index format separately
+    if args.format == "index":
+        out = render_index(env, data)
     # Common context for md and html
-    if args.format in ("md", "html"):
+    elif args.format in ("md", "html"):
         ctx = {
             "experiences": data.get("experiences", []),
             "projects": data.get("projects", []),
@@ -107,11 +162,15 @@ def main(argv: list[str] | None = None) -> int:
             "skills": data.get("skills", []),
             "personal": data.get("personal", {}),
         }
-        template = f"resume.{args.format}.tmpl"
+        template = f"resume.{args.format}.j2"
+        out = render_template(env, template, ctx)
     elif args.format == "typst":
         if not args.profile:
-            raise SystemExit("Missing --profile for typst output")
-        filtered = apply_profile(data, args.profile)
+            return 1
+        try:
+            filtered = apply_profile(data, args.profile)
+        except ValidationError:
+            return 1
         ctx = {
             "personal": data.get("personal", {}),
             "experiences": filtered.get("experiences", []),
@@ -120,9 +179,10 @@ def main(argv: list[str] | None = None) -> int:
             "skills": data.get("skills", []),
             "publications": data.get("publications", []),
         }
-        template = "resume.typ.tmpl"
+        template = "resume.typ.j2"
+        out = render_template(env, template, ctx)
 
-    out = render_template(template, ctx)
+    # Write output
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     Path(args.output).write_text(out, encoding="utf-8")
     return 0
