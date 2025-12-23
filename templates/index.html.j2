@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume</title>
+  <title>{{ name }} - Resume</title>
+  <meta name="description" content="Resume and CV for {{ name }}{{ ', ' + title if title else '' }}">
+  <meta name="author" content="{{ name }}">
+  
+  <!-- Open Graph for social sharing -->
+  <meta property="og:title" content="{{ name }} - Resume">
+  <meta property="og:type" content="profile">
+  <meta property="og:description" content="Professional resume for {{ name }}">
+  
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -26,6 +34,11 @@
     h1 {
       color: #333;
       font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 1.2em;
       margin-bottom: 10px;
     }
     p {
@@ -55,17 +68,64 @@
       background: #f0f0f0;
       color: #333;
     }
+    .footer {
+      margin-top: 30px;
+      color: #999;
+      font-size: 0.9em;
+    }
+    .version {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #aaa;
+      font-size: 0.85em;
+      font-family: 'Monaco', 'Courier New', monospace;
+    }
+    .version a {
+      color: #667eea;
+      background: none;
+      padding: 0;
+      display: inline;
+      font-weight: normal;
+      font-size: 1em;
+    }
+    .version a:hover {
+      transform: none;
+      box-shadow: none;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Albert Wei's Resume</h1>
-    <p>In the following flavors:</p>
+    <h1>{{ name }}</h1>
+    {% if title %}
+    <p class="subtitle">{{ title }}</p>
+    {% endif %}
+    <p>Download my resume in your preferred format:</p>
     <div class="links">
-      <a href="resume.pdf">View PDF Resume</a>
-      <a href="resume.html" class="secondary">View HTML Resume</a>
-      <a href="resume.md" class="secondary">View Markdown Source</a>
+      <a href="resume.pdf">📄 PDF Resume</a>
+      <a href="resume.html" class="secondary">🌐 HTML Resume</a>
+      <a href="resume.md" class="secondary">📝 Markdown Source</a>
     </div>
+    {% if contact.email or contact.github or contact.linkedin %}
+    <div class="footer">
+      <p>
+        {% if contact.email %}<a href="mailto:{{ contact.email }}" style="color: #999; font-size: 0.9em;">{{ contact.email }}</a>{% endif %}
+        {% if contact.github %} • <a href="{{ contact.github }}" style="color: #999; font-size: 0.9em;">GitHub</a>{% endif %}
+        {% if contact.linkedin %} • <a href="{{ contact.linkedin }}" style="color: #999; font-size: 0.9em;">LinkedIn</a>{% endif %}
+      </p>
+    </div>
+    {% endif %}
+    {% if build_info %}
+    <div class="version">
+      <p>
+        Version: <a href="{{ build_info.release_url }}" target="_blank" rel="noopener">{{ build_info.tag }}</a><br>
+        Built: {{ build_info.date }}<br>
+        Commit: <a href="{{ build_info.commit_url }}" target="_blank" rel="noopener">{{ build_info.commit_short }}</a>
+      </p>
+    </div>
+    {% endif %}
   </div>
 </body>
 </html>

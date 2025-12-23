@@ -5,16 +5,16 @@ DATA_FILE ?= data/data.yaml
 
 all: md html pdf index
 
-build/resume.md: $(DATA_FILE) templates/resume.md.tmpl scripts/render.py
+build/resume.md: $(DATA_FILE) templates/resume.md.j2 scripts/render.py
 	$(RENDER) --format md --output $@
 
-build/resume.html: $(DATA_FILE) templates/resume.html.tmpl scripts/render.py
+build/resume.html: $(DATA_FILE) templates/resume.html.j2 scripts/render.py
 	$(RENDER) --format html --output $@
 
-build/index.html: templates/index.html.tmpl
-	cp templates/index.html.tmpl build/index.html
+build/index.html: $(DATA_FILE) templates/index.html.j2 scripts/render.py
+	$(RENDER) --format index --output $@
 
-build/resume.typ: $(DATA_FILE) templates/resume.typ.tmpl scripts/render.py
+build/resume.typ: $(DATA_FILE) templates/resume.typ.j2 scripts/render.py
 	$(RENDER) --profile $(PROFILE) --format typst --output $@
 
 build/resume.pdf: build/resume.typ
@@ -32,7 +32,7 @@ md: setup build/resume.md
 
 html: setup build/resume.html
 
-index: build/index.html
+index: setup build/index.html
 
 check:
 	@scripts/check_outputs.sh
