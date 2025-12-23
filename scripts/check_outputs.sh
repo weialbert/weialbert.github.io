@@ -42,5 +42,3 @@ if [ "$PAGE_COUNT" != "1" ]; then
 fi
 
 echo "Resume checks passed"
-
-uv run make clean
