@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import tomllib
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -12,9 +13,21 @@ from zoneinfo import ZoneInfo
 import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-ROOT = Path(__file__).resolve().parents[1]  # resume/ directory
+ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "data" / "data.yaml"
 TEMPLATES_DIR = ROOT / "templates"
+PYPROJECT_FILE = ROOT / "pyproject.toml"
+
+
+def get_version_from_pyproject() -> str:
+    """Read version from pyproject.toml."""
+    try:
+        with PYPROJECT_FILE.open("rb") as f:
+            pyproject = tomllib.load(f)
+            version = pyproject.get("project", {}).get("version", "0.0.0")
+            return f"v{version}"
+    except (FileNotFoundError, KeyError):
+        return "v0.0.0"
 
 
 class ValidationError(Exception):
@@ -103,7 +116,7 @@ def create_jinja_env() -> Environment:
 
 def get_build_info() -> dict[str, Any]:
     """Get build information from environment variables."""
-    tag = os.environ.get("RELEASE_TAG", "dev")
+    tag = get_version_from_pyproject() or os.environ.get("RELEASE_TAG")
     commit = os.environ.get("GITHUB_SHA", "unknown")
     commit_short = commit[:7] if commit != "unknown" else "unknown"
     repo = os.environ.get("GITHUB_REPOSITORY", "weialbert/resume")

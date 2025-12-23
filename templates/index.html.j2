@@ -111,9 +111,25 @@
     {% if contact.email or contact.github or contact.linkedin %}
     <div class="footer">
       <p>
-        {% if contact.email %}<a href="mailto:{{ contact.email }}" style="color: #999; font-size: 0.9em;">{{ contact.email }}</a>{% endif %}
-        {% if contact.github %} • <a href="{{ contact.github }}" style="color: #999; font-size: 0.9em;">GitHub</a>{% endif %}
-        {% if contact.linkedin %} • <a href="{{ contact.linkedin }}" style="color: #999; font-size: 0.9em;">LinkedIn</a>{% endif %}
+                {% if contact.email %}
+          <a href="mailto:{{ contact.email }}" style="color: #999; font-size: 0.9em;">
+            {{ contact.email }}
+          </a>
+        {% endif %}
+        
+        {% if contact.github %}
+          {% if contact.email %} • {% endif %}
+          <a href="{{ contact.github }}" style="color: #999; font-size: 0.9em;">
+            GitHub
+          </a>
+        {% endif %}
+        
+        {% if contact.linkedin %}
+          {% if contact.email or contact.github %} • {% endif %}
+          <a href="{{ contact.linkedin }}" style="color: #999; font-size: 0.9em;">
+            LinkedIn
+          </a>
+        {% endif %}
       </p>
     </div>
     {% endif %}
