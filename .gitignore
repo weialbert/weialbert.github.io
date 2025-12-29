@@ -1,0 +1,5 @@
+# Ignore build metadata and local env artifacts
+resume.egg-info/
+__pycache__/
+*.pyc
+.venv/
