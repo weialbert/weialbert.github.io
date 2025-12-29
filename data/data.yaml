@@ -2,7 +2,7 @@
 profiles:
   onepage:
     min_importance: 4
-    max_bullets_per_experience: 3
+    max_bullets_per_experience: 5
     include_tags: null
     exclude_tags: null
 
@@ -24,7 +24,7 @@ personal:
   phone: "(203) 529-7086"
   linkedin: "linkedin.com/in/albert--wei"
   github: "github.com/weialbert"
-  portfolio: "weialbert.github.io/"
+  portfolio: "weialbert.github.io"
 
 
 education:
