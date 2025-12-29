@@ -1,9 +1,11 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Build and Test"]
+    types:
+      - completed
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,42 +17,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-
-      - name: Setup Python
-        run: uv python install
-
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Setup Typst
-        uses: typst-community/setup-typst@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
         with:
-          typst-version: 'latest'
+          name: deploy-package
+          path: pages_output
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
 
-      - name: Build resume
-        run: uv run make all
-
-      - name: Prepare GitHub Pages output
-        run: |
-          mkdir -p pages_output
-          cp build/index.html pages_output/
-          cp build/resume.pdf pages_output/
-          cp build/resume.html pages_output/
-          cp build/resume.md pages_output/
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: pages_output
+          retention-days: 1
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
