@@ -1,0 +1,251 @@
+---
+import ThemeToggle from '../ThemeToggle.astro';
+
+const navItems = [
+  { href: '/', label: 'Home', icon: 'home' },
+  { href: '/about', label: 'About', icon: 'user' },
+  { href: '/projects', label: 'Projects', icon: 'briefcase' },
+  { href: '/photos', label: 'Photos', icon: 'camera' },
+  { href: '/blog', label: 'Blog', icon: 'book' },
+  { href: '/resume', label: 'Resume', icon: 'file' },
+  { href: '/contact', label: 'Contact', icon: 'mail' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <a href="/" class="logo">
+      <span class="logo-text">Albert Wei</span>
+    </a>
+    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <ul>
+      {navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class:list={['nav-link', { active: currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href)) }]}
+            aria-current={currentPath === item.href ? 'page' : undefined}
+          >
+            <span class="nav-icon" data-icon={item.icon}></span>
+            <span class="nav-label">{item.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  
+  <div class="sidebar-footer">
+    <ThemeToggle />
+  </div>
+</aside>
+
+<!-- Mobile Overlay -->
+<div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  // Check if sidebar state is stored
+  const sidebarOpen = localStorage.getItem('sidebar-open') !== 'false';
+  
+  if (!sidebarOpen && window.innerWidth > 768) {
+    sidebar?.classList.add('collapsed');
+  }
+  
+  // Toggle sidebar
+  function toggleSidebar() {
+    sidebar?.classList.toggle('collapsed');
+    const isCollapsed = sidebar?.classList.contains('collapsed');
+    localStorage.setItem('sidebar-open', String(!isCollapsed));
+    
+    // On mobile, show overlay when open
+    if (window.innerWidth <= 768) {
+      overlay?.classList.toggle('active');
+      document.body.style.overflow = overlay?.classList.contains('active') ? 'hidden' : '';
+    }
+  }
+  
+  toggle?.addEventListener('click', toggleSidebar);
+  overlay?.addEventListener('click', toggleSidebar);
+  
+  // Close sidebar on mobile when navigating
+  if (window.innerWidth <= 768) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        sidebar?.classList.add('collapsed');
+        overlay?.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+</script>
+
+<style>
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-width);
+    background-color: var(--color-card-bg);
+    border-right: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-base), width var(--transition-base);
+    z-index: 1000;
+  }
+  
+  .sidebar-header {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .logo {
+    text-decoration: none;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+  
+  .sidebar-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-sm);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+  }
+  
+  .sidebar-toggle:hover {
+    background-color: var(--color-bg-secondary);
+  }
+  
+  .sidebar-nav {
+    flex: 1;
+    padding: var(--space-lg) 0;
+    overflow-y: auto;
+  }
+  
+  .sidebar-nav ul {
+    list-style: none;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: var(--space-md) var(--space-lg);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    position: relative;
+  }
+  
+  .nav-link:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
+  }
+  
+  .nav-link.active {
+    color: var(--color-accent);
+    background-color: var(--color-bg-secondary);
+  }
+  
+  .nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--color-accent);
+  }
+  
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: var(--space-md);
+    flex-shrink: 0;
+  }
+  
+  .nav-label {
+    white-space: nowrap;
+    transition: opacity var(--transition-fast);
+  }
+  
+  .sidebar-footer {
+    padding: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+  
+  /* Collapsed state (desktop) */
+  @media (min-width: 769px) {
+    .sidebar.collapsed {
+      width: var(--sidebar-width-collapsed);
+    }
+    
+    .sidebar.collapsed .logo-text,
+    .sidebar.collapsed .nav-label {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .sidebar.collapsed .nav-link {
+      justify-content: center;
+    }
+    
+    .sidebar.collapsed .nav-icon {
+      margin-right: 0;
+    }
+  }
+  
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    
+    .sidebar:not(.collapsed) {
+      transform: translateX(0);
+    }
+  }
+  
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+  }
+</style>

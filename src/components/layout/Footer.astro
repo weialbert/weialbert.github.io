@@ -1,0 +1,56 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="https://github.com/weialbert" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://linkedin.com/in/albert-wei" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://twitter.com/weialbert" target="_blank" rel="noopener noreferrer">Twitter</a>
+    </div>
+    
+    <p class="copyright">
+      &copy; {year} Albert Wei. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-card-bg);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-xl) var(--space-lg);
+    margin-top: auto;
+  }
+  
+  .footer-content {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+  
+  .footer-links a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  
+  .footer-links a:hover {
+    color: var(--color-accent);
+  }
+  
+  .copyright {
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+  }
+</style>
