@@ -13,7 +13,7 @@
     "clean": "rm -rf public/resume"
   },
   "dependencies": {
-    "astro": "^5.16.6"
+    "astro": "^5.17.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
