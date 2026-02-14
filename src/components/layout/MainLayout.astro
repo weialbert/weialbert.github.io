@@ -22,9 +22,9 @@ interface Props {
       <main id="main-content" class="main-content">
         <slot />
       </main>
-      
-      <Footer />
     </div>
+    
+    <Footer />
   </div>
   
   <script>
@@ -35,15 +35,15 @@ interface Props {
 <style>
   .app-container {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
   }
   
   .main-wrapper {
-    flex: 1;
-    margin-left: var(--sidebar-width);
     display: flex;
     flex-direction: column;
-    transition: margin-left var(--transition-base);
+    flex: 1;
+    margin-left: var(--sidebar-width);
   }
   
   @media (max-width: 768px) {
