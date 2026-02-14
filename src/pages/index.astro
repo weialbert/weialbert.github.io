@@ -1,6 +1,13 @@
 ---
 import MainLayout from '../components/layout/MainLayout.astro';
 import { getCollection } from 'astro:content';
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../data/resume.yaml';
+
+// Get resume data
+const resumeDataTyped = resumeData as any;
+const { experiences, personal } = resumeDataTyped;
+const currentRole = experiences[0];
 
 // Get featured content
 const projects = await getCollection('projects');
@@ -27,7 +34,7 @@ const featuredPhotos = photos
     <div class="hero-content">
       <h1 class="hero-title">Hi, I'm Albert Wei</h1>
       <p class="hero-subtitle">
-        Software Engineer, Data Enthusiast, and Creative Developer
+        {currentRole.role} at {currentRole.company}
       </p>
       <p class="hero-description">
         I build elegant solutions to complex problems and love exploring new technologies.

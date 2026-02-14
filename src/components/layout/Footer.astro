@@ -1,17 +1,21 @@
 ---
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../../data/resume.yaml';
+
 const year = new Date().getFullYear();
+const { personal } = resumeData;
 ---
 
 <footer class="footer">
   <div class="footer-content">
     <div class="footer-links">
-      <a href="https://github.com/weialbert" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://linkedin.com/in/albert-wei" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="https://twitter.com/weialbert" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href={`https://${personal.github}`} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href={`https://${personal.linkedin}`} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={`https://${personal.portfolio}`} target="_blank" rel="noopener noreferrer">Portfolio</a>
     </div>
     
     <p class="copyright">
-      &copy; {year} Albert Wei. All rights reserved.
+      &copy; {year} {personal.name}. All rights reserved.
     </p>
   </div>
 </footer>

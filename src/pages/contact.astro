@@ -1,5 +1,9 @@
 ---
 import MainLayout from '../components/layout/MainLayout.astro';
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../data/resume.yaml';
+
+const { personal } = resumeData;
 ---
 
 <MainLayout 
@@ -43,19 +47,15 @@ import MainLayout from '../components/layout/MainLayout.astro';
       <section class="contact-info-section">
         <h2>Connect With Me</h2>
         <div class="contact-links">
-          <a href="https://github.com/weialbert" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <a href={`https://${personal.github}`} target="_blank" rel="noopener noreferrer" class="contact-link">
             <span class="link-label">GitHub</span>
             <span class="link-icon">→</span>
           </a>
-          <a href="https://linkedin.com/in/albert-wei" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <a href={`https://${personal.linkedin}`} target="_blank" rel="noopener noreferrer" class="contact-link">
             <span class="link-label">LinkedIn</span>
             <span class="link-icon">→</span>
           </a>
-          <a href="https://twitter.com/weialbert" target="_blank" rel="noopener noreferrer" class="contact-link">
-            <span class="link-label">Twitter</span>
-            <span class="link-icon">→</span>
-          </a>
-          <a href="mailto:hello@albertwei.dev" class="contact-link">
+          <a href={`mailto:${personal.email}`} class="contact-link">
             <span class="link-label">Email</span>
             <span class="link-icon">→</span>
           </a>

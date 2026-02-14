@@ -1,6 +1,10 @@
 ---
 import MainLayout from '../components/layout/MainLayout.astro';
 import { getCollection } from 'astro:content';
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../data/resume.yaml';
+
+const { personal } = resumeData as any;
 
 const projects = await getCollection('projects');
 const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));

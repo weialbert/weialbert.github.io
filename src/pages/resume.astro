@@ -1,6 +1,9 @@
 ---
-import MainLayout from "../components/layout/MainLayout.astro";
+import MainLayout from '../components/layout/MainLayout.astro';
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../data/resume.yaml';
 
+const { personal } = resumeData as any;
 const profiles = [
   {
     name: "default",
