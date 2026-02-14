@@ -28,21 +28,34 @@ const featuredPhotos = photos
   .slice(0, 6);
 ---
 
-<MainLayout title="Albert Wei - Software Engineer & Developer">
+<MainLayout title="Albert Wei - Data Engineer & Developer">
   <!-- Hero Section -->
   <section id="hero" class="hero">
     <div class="hero-content">
       <h1 class="hero-title">Hi, I'm Albert Wei</h1>
       <p class="hero-subtitle">
-        {currentRole.role} at {currentRole.company}
+        I'm currently a: &ensp; <code>{currentRole.role}</code>
       </p>
-      <p class="hero-description">
-        I build elegant solutions to complex problems and love exploring new technologies.
-      </p>
+      <!-- <p class="hero-description">
+        You'll find my work history and side projects here.<br>
+        If you're looking for food pics or my travel pictures, you'll also find that here.
+      </p> -->
       <div class="hero-cta">
         <a href="/projects" class="btn btn-primary">View My Work</a>
         <a href="/contact" class="btn btn-secondary">Get In Touch</a>
       </div>
+    </div>
+  </section>
+
+  <!-- Quick About -->
+  <section id="about-preview" class="section">
+    <div class="about-content">
+      <h2>About Me</h2>
+      <p>
+        I'm a {currentRole.role} based in NYC. Before that, I studied operations research at the University of Michigan class of 2022. 
+        In my free time, you'll find me exploring with my camera, swimming, or cooking.
+      </p>
+      <a href="/about" class="btn btn-primary">Learn More</a>
     </div>
   </section>
 
@@ -131,18 +144,6 @@ const featuredPhotos = photos
     </section>
   )}
 
-  <!-- Quick About -->
-  <section id="about-preview" class="section">
-    <div class="about-content">
-      <h2>About Me</h2>
-      <p>
-        I'm a passionate software engineer with a love for clean code and beautiful design.
-        When I'm not coding, you'll find me exploring with my camera or learning about new technologies.
-      </p>
-      <a href="/about" class="btn btn-primary">Learn More</a>
-    </div>
-  </section>
-
   <!-- Contact CTA -->
   <section id="contact-cta" class="section cta-section">
     <h2>Let's Work Together</h2>
@@ -154,7 +155,7 @@ const featuredPhotos = photos
 <style>
   /* Hero Section */
   .hero {
-    min-height: 80vh;
+    min-height: 60vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -358,7 +359,7 @@ const featuredPhotos = photos
   
   /* About Preview */
   .about-content {
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
     text-align: center;
   }
