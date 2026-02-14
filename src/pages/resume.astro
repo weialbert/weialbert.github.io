@@ -1,6 +1,5 @@
 ---
-// src/pages/resume.astro
-import BaseLayout from "../layouts/BaseLayout.astro";
+import MainLayout from "../components/layout/MainLayout.astro";
 
 const profiles = [
   {
@@ -16,32 +15,123 @@ const profiles = [
 ];
 ---
 
-<BaseLayout title="Resume">
-  <div class="resume-page">
+<MainLayout 
+  title="Resume - Albert Wei"
+  description="Download my resume"
+>
+  <article class="resume-page">
     <header class="page-header">
+      <h1>Resume</h1>
       <p>Download my resume in different formats</p>
     </header>
 
     <div class="resume-grid">
-      {
-        profiles.map(({ name, label, description }) => (
-          <article class="profile-card">
-            <h2>{label}</h2>
-            <p class="description">{description}</p>
+      {profiles.map(({ name, label, description }) => (
+        <article class="profile-card">
+          <h2>{label}</h2>
+          <p class="description">{description}</p>
 
-            <div class="download-links">
-              <a href={`/resume/${name}/resume.pdf`} target="_blank">
-                {" "}
-                View PDF{" "}
-              </a> 
-              <a href={`/resume/${name}/resume.typ`} target="_blank">
-                {" "}
-                Source{" "}
-              </a>
-            </div>
-          </article>
-        ))
-      }
+          <div class="download-links">
+            <a href={`/resume/${name}/resume.pdf`} target="_blank" class="btn btn-primary">
+              View PDF
+            </a> 
+            <a href={`/resume/${name}/resume.typ`} target="_blank" class="btn btn-secondary">
+              Source
+            </a>
+          </div>
+        </article>
+      ))}
     </div>
-  </div>
-</BaseLayout>
+  </article>
+</MainLayout>
+
+<style>
+  .resume-page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .page-header h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-header p {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+  }
+
+  .resume-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .profile-card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .profile-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .profile-card h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .description {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+
+  .download-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    text-align: center;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-accent);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>

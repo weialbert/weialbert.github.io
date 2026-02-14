@@ -1,0 +1,235 @@
+---
+import MainLayout from '../components/layout/MainLayout.astro';
+---
+
+<MainLayout 
+  title="About Me - Albert Wei"
+  description="Learn more about my background, skills, and interests"
+>
+  <article class="about-page">
+    <header class="page-header">
+      <h1>About Me</h1>
+    </header>
+
+    <section class="intro-section">
+      <div class="intro-text">
+        <h2>Hi, I'm Albert Wei</h2>
+        <p>
+          I'm a software engineer passionate about building elegant solutions to complex problems.
+          I specialize in full-stack development and love exploring how technology can make a positive impact.
+        </p>
+        <p>
+          When I'm not coding, you'll find me exploring with my camera, reading about new technologies,
+          or enjoying time outdoors.
+        </p>
+      </div>
+    </section>
+
+    <section class="skills-section">
+      <h2>Skills & Technologies</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Frontend</h3>
+          <ul>
+            <li>React / Next.js</li>
+            <li>TypeScript</li>
+            <li>Astro</li>
+            <li>CSS / Tailwind</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Backend</h3>
+          <ul>
+            <li>Node.js</li>
+            <li>Python</li>
+            <li>PostgreSQL</li>
+            <li>GraphQL</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Tools & Other</h3>
+          <ul>
+            <li>Git / GitHub</li>
+            <li>Docker</li>
+            <li>AWS</li>
+            <li>CI/CD</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="interests-section">
+      <h2>Interests</h2>
+      <div class="interests-grid">
+        <div class="interest-card">
+          <h3>📸 Photography</h3>
+          <p>Capturing moments and telling visual stories through my lens.</p>
+        </div>
+        <div class="interest-card">
+          <h3>✍️ Writing</h3>
+          <p>Sharing knowledge and experiences through technical writing.</p>
+        </div>
+        <div class="interest-card">
+          <h3>🎨 Design</h3>
+          <p>Creating intuitive and beautiful user experiences.</p>
+        </div>
+        <div class="interest-card">
+          <h3>🚀 Open Source</h3>
+          <p>Contributing to and learning from the open source community.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <h2>Let's Connect</h2>
+      <p>Interested in working together or just want to say hi?</p>
+      <a href="/contact" class="btn btn-primary">Get In Touch</a>
+    </section>
+  </article>
+</MainLayout>
+
+<style>
+  .about-page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .page-header h1 {
+    font-size: var(--text-4xl);
+  }
+
+  /* Intro Section */
+  .intro-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3xl);
+    margin-bottom: var(--space-3xl);
+  }
+
+  .intro-text h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  .intro-text p {
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+  }
+
+  /* Skills Section */
+  .skills-section {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-2xl);
+    margin-top: var(--space-2xl);
+  }
+
+  .skill-category h3 {
+    margin-bottom: var(--space-md);
+    color: var(--color-accent);
+  }
+
+  .skill-category ul {
+    list-style: none;
+  }
+
+  .skill-category li {
+    padding: var(--space-sm) 0;
+    color: var(--color-text-secondary);
+  }
+
+  .skill-category li::before {
+    content: '→ ';
+    color: var(--color-accent);
+    margin-right: var(--space-sm);
+  }
+
+  /* Interests Section */
+  .interests-section {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .interests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-2xl);
+  }
+
+  .interest-card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .interest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .interest-card h3 {
+    margin-bottom: var(--space-md);
+  }
+
+  .interest-card p {
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    text-align: center;
+    background-color: var(--color-bg-secondary);
+    padding: var(--space-3xl);
+    border-radius: var(--radius-xl);
+  }
+
+  .cta-section h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .cta-section p {
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: var(--text-3xl);
+    }
+
+    .intro-section {
+      gap: var(--space-2xl);
+    }
+  }
+</style>

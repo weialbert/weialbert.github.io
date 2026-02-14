@@ -1,6 +1,208 @@
 ---
-import MySiteLayout from '../layouts/BaseLayout.astro';
+import MainLayout from '../components/layout/MainLayout.astro';
 ---
-<MySiteLayout title="Contact Me">
-  <p>Find me at the following links</p>
-</MySiteLayout>
+
+<MainLayout 
+  title="Contact - Albert Wei"
+  description="Get in touch with me"
+>
+  <article class="contact-page">
+    <header class="page-header">
+      <h1>Let's Talk</h1>
+      <p>Have a question or proposal? I'd love to hear from you.</p>
+    </header>
+
+    <div class="contact-container">
+      <section class="contact-form-section">
+        <h2>Send me a Message</h2>
+        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" required />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="6" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </section>
+
+      <section class="contact-info-section">
+        <h2>Connect With Me</h2>
+        <div class="contact-links">
+          <a href="https://github.com/weialbert" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <span class="link-label">GitHub</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="https://linkedin.com/in/albert-wei" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <span class="link-label">LinkedIn</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="https://twitter.com/weialbert" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <span class="link-label">Twitter</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="mailto:hello@albertwei.dev" class="contact-link">
+            <span class="link-label">Email</span>
+            <span class="link-icon">→</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  .contact-page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .page-header h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-header p {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+  }
+
+  .contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3xl);
+  }
+
+  /* Form Section */
+  .contact-form-section {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+  }
+
+  .contact-form-section h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-lg);
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: var(--space-sm);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--text-base);
+    transition: border-color var(--transition-fast);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .contact-form button {
+    width: 100%;
+  }
+
+  /* Info Section */
+  .contact-info-section h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-fast);
+  }
+
+  .contact-link:hover {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-accent);
+  }
+
+  .link-label {
+    font-weight: 500;
+  }
+
+  .link-icon {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    border: none;
+    cursor: pointer;
+    font-size: var(--text-base);
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: var(--text-3xl);
+    }
+
+    .contact-container {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>
