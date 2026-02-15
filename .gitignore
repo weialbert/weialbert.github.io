@@ -1,7 +1,7 @@
 # build output
 dist/
 build/
-public/ 
+public/resume/
 
 # generated types
 .astro/

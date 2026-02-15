@@ -8,8 +8,8 @@
     "build:resume": "tsx src/lib/resume/build.ts --all",
     "preview": "astro preview",
     "astro": "astro",
-    "clean": "rm -rf dist/",
-    "clean:full": "rm -rf dist/ node_modules package-lock.json",
+    "clean": "rm -rf dist/ public/resume",
+    "clean:full": "rm -rf dist/ public/resume node_modules package-lock.json",
     "reset": "npm run clean:full && npm install",
     "update": "ncu -u && npm install",
     "check": "ncu"
