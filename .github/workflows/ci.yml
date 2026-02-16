@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: ['**']
+    branches-ignore: [master] # handled by workflow call in deploy pipeline
   workflow_call:
     inputs:
       node-version:
