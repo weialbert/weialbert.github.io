@@ -1,13 +1,13 @@
 ---
-import MainLayout from '../../components/layout/MainLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
+import MainLayout from "../../components/layout/MainLayout.astro";
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project },
-  }));
+	const projects = await getCollection("projects");
+	return projects.map((project) => ({
+		params: { slug: project.slug },
+		props: { project },
+	}));
 }
 
 const { project } = Astro.props;

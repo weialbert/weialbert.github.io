@@ -1,22 +1,23 @@
 ---
-import MainLayout from '../../components/layout/MainLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
+import MainLayout from "../../components/layout/MainLayout.astro";
 
 export async function getStaticPaths() {
-  const photos = await getCollection('photos');
-  return photos.map((photo) => ({
-    params: { slug: photo.slug },
-    props: { photo },
-  }));
+	const photos = await getCollection("photos");
+	return photos.map((photo) => ({
+		params: { slug: photo.slug },
+		props: { photo },
+	}));
 }
 
 const { photo } = Astro.props;
 const { Content } = await photo.render();
 
-const allPhotos = await getCollection('photos');
-const currentIndex = allPhotos.findIndex(p => p.slug === photo.slug);
+const allPhotos = await getCollection("photos");
+const currentIndex = allPhotos.findIndex((p) => p.slug === photo.slug);
 const prevPhoto = currentIndex > 0 ? allPhotos[currentIndex - 1] : null;
-const nextPhoto = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] : null;
+const nextPhoto =
+	currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] : null;
 ---
 
 <MainLayout 

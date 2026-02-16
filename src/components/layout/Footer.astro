@@ -1,61 +1,67 @@
 ---
-// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
-import resumeData from '../../data/resume.yaml';
-import { execSync } from 'child_process';
+import { execSync } from "node:child_process";
+// @ts-expect-error - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from "../../data/resume.yaml";
 
 const year = new Date().getFullYear();
 const { personal } = resumeData;
 
 // Get latest commit info
 let commitInfo = {
-  shortHash: '',
-  date: new Date(),
-  url: ''
+	shortHash: "",
+	date: new Date(),
+	url: "",
 };
 
 try {
-  const hash = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
-  const fullHash = execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
-  const timestamp = execSync('git log -1 --pretty=%ai', { encoding: 'utf-8' }).trim();
-  
-  let remoteUrl = '';
-  try {
-    remoteUrl = execSync('git config --get remote.origin.url', { encoding: 'utf-8' }).trim();
-  } catch {
-    remoteUrl = '';
-  }
-  
-  if (remoteUrl) {
-    // Convert SSH to HTTPS URL and remove .git suffix
-    let repoUrl = remoteUrl
-      .replace('git@github.com:', 'https://github.com/')
-      .replace('git@gitlab.com:', 'https://gitlab.com/')
-      .replace('git@bitbucket.org:', 'https://bitbucket.org/')
-      .replace(/\.git$/, '');
-    
-    commitInfo = {
-      shortHash: hash,
-      date: new Date(timestamp),
-      url: `${repoUrl}/commit/${fullHash}`
-    };
-  } else {
-    commitInfo = {
-      shortHash: hash,
-      date: new Date(timestamp),
-      url: ''
-    };
-  }
+	const hash = execSync("git rev-parse --short HEAD", {
+		encoding: "utf-8",
+	}).trim();
+	const fullHash = execSync("git rev-parse HEAD", { encoding: "utf-8" }).trim();
+	const timestamp = execSync("git log -1 --pretty=%ai", {
+		encoding: "utf-8",
+	}).trim();
+
+	let remoteUrl = "";
+	try {
+		remoteUrl = execSync("git config --get remote.origin.url", {
+			encoding: "utf-8",
+		}).trim();
+	} catch {
+		remoteUrl = "";
+	}
+
+	if (remoteUrl) {
+		// Convert SSH to HTTPS URL and remove .git suffix
+		let repoUrl = remoteUrl
+			.replace("git@github.com:", "https://github.com/")
+			.replace("git@gitlab.com:", "https://gitlab.com/")
+			.replace("git@bitbucket.org:", "https://bitbucket.org/")
+			.replace(/\.git$/, "");
+
+		commitInfo = {
+			shortHash: hash,
+			date: new Date(timestamp),
+			url: `${repoUrl}/commit/${fullHash}`,
+		};
+	} else {
+		commitInfo = {
+			shortHash: hash,
+			date: new Date(timestamp),
+			url: "",
+		};
+	}
 } catch (error) {
-  // Git commands may fail in production or non-git environments, that's okay
+	// Git commands may fail in production or non-git environments, that's okay
 }
 
-const lastUpdated = commitInfo.date.toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  timeZoneName: 'short'
+const lastUpdated = commitInfo.date.toLocaleDateString("en-US", {
+	year: "numeric",
+	month: "short",
+	day: "numeric",
+	hour: "2-digit",
+	minute: "2-digit",
+	timeZoneName: "short",
 });
 ---
 

@@ -1,5 +1,5 @@
-// Type definitions for resume.yaml imports
-declare module '*.yaml' {
+// Resume Data Types
+declare module "../data/resume.yaml" {
   export interface PersonalInfo {
     name: string;
     location: string;
@@ -73,5 +73,34 @@ declare module '*.yaml' {
   }
 
   const data: ResumeData;
+  export default data;
+}
+
+// Profiles Data Types
+declare module "../data/profiles.yaml" {
+  export interface ProfileConfig {
+    min_importance: number;
+    max_bullets_per_experience: number;
+    include_tags: string[] | null;
+    exclude_tags: string[] | null;
+  }
+
+  export interface ProfilesData {
+    profiles: {
+      [key: string]: ProfileConfig;
+    };
+    config: {
+      max_bullet_length: number;
+    };
+  }
+
+  const data: ProfilesData;
+  export default data;
+}
+
+
+declare module "*.yaml" {
+	// biome-ignore lint/suspicious/noExplicitAny: catch-all for other YAML files without specific types defined
+    const data: Record<string, any>; 
   export default data;
 }
