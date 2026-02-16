@@ -1,54 +1,54 @@
 ---
-import MainLayout from '../components/layout/MainLayout.astro';
-import resumeData from '../data/resume.yaml';
+import MainLayout from "../components/layout/MainLayout.astro";
+import resumeData from "../data/resume.yaml";
 
 interface Skill {
-  category: string;
-  items: string[];
+	category: string;
+	items: string[];
 }
 
 interface Award {
-  [key: string]: any;
+	[key: string]: any;
 }
 
 interface SchoolDegree {
-  degree: string;
-  start: number;
-  end: number;
-  gpa?: string;
-  details?: string[];
+	degree: string;
+	start: number;
+	end: number;
+	gpa?: string;
+	details?: string[];
 }
 
 interface School {
-  institution: string;
-  location: string;
-  degrees: SchoolDegree[];
-  awards?: (string | Award)[];
+	institution: string;
+	location: string;
+	degrees: SchoolDegree[];
+	awards?: (string | Award)[];
 }
 
 interface Bullet {
-  id: string;
-  text: string;
-  importance: number;
-  tags: string[];
+	id: string;
+	text: string;
+	importance: number;
+	tags: string[];
 }
 
 interface Experience {
-  id: string;
-  company: string;
-  role: string;
-  location: string;
-  start: number;
-  end: string | number;
-  tags: string[];
-  bullets: Bullet[];
+	id: string;
+	company: string;
+	role: string;
+	location: string;
+	start: number;
+	end: string | number;
+	tags: string[];
+	bullets: Bullet[];
 }
 
 const { personal, skills, education, experiences } = resumeData as {
-  personal: any;
-  skills: Skill[];
-  education: School[];
-  experiences: Experience[];
+	personal: any;
+	skills: Skill[];
+	education: School[];
+	experiences: Experience[];
 };
 const currentRole = experiences[0];
 ---

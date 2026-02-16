@@ -15,6 +15,8 @@
 		"check": "ncu",
 		"typecheck": "tsc --noEmit",
 		"lint": "biome lint .",
+		"lint:fix": "biome check --write .",
+		"lint:fix-all": "biome check --write --unsafe .",
 		"format": "biome format . --write"
 	},
 	"dependencies": {

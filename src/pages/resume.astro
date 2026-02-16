@@ -1,20 +1,20 @@
 ---
-import MainLayout from '../components/layout/MainLayout.astro';
-// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
-import resumeData from '../data/resume.yaml';
+import MainLayout from "../components/layout/MainLayout.astro";
+// @ts-expect-error - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from "../data/resume.yaml";
 
 const { personal } = resumeData as any;
 const profiles = [
-  {
-    name: "default",
-    label: "Full Resume",
-    description: "Complete work history with all details",
-  },
-  {
-    name: "onepage",
-    label: "One Page Resume",
-    description: "Condensed version highlighting key achievements",
-  },
+	{
+		name: "default",
+		label: "Full Resume",
+		description: "Complete work history with all details",
+	},
+	{
+		name: "onepage",
+		label: "One Page Resume",
+		description: "Condensed version highlighting key achievements",
+	},
 ];
 ---
 

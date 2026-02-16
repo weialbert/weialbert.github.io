@@ -1,18 +1,18 @@
 ---
-import '../assets/styles/global.css';
+import "../assets/styles/global.css";
 
 interface Props {
-  title: string;
-  description?: string;
-  image?: string;
-  type?: 'website' | 'article';
+	title: string;
+	description?: string;
+	image?: string;
+	type?: "website" | "article";
 }
 
 const {
-  title,
-  description = 'Albert Wei - Software Engineer & Developer',
-  image = '/og-image.jpg',
-  type = 'website'
+	title,
+	description = "Albert Wei - Software Engineer & Developer",
+	image = "/og-image.jpg",
+	type = "website",
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);

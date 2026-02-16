@@ -1,14 +1,14 @@
 ---
-import MainLayout from '../components/layout/MainLayout.astro';
-import { getCollection } from 'astro:content';
-import resumeData from '../data/resume.yaml';
+import { getCollection } from "astro:content";
+import MainLayout from "../components/layout/MainLayout.astro";
+import resumeData from "../data/resume.yaml";
 
 const { personal } = resumeData as any;
 
-const projects = await getCollection('projects');
+const projects = await getCollection("projects");
 const sortedProjects = projects
-  .filter(project => !project.data.draft)
-  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+	.filter((project) => !project.data.draft)
+	.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 ---
 
 <MainLayout 

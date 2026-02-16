@@ -1,31 +1,30 @@
 ---
-import MainLayout from '../components/layout/MainLayout.astro';
-import { getCollection } from 'astro:content';
-// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
-import resumeData from '../data/resume.yaml';
+import { getCollection } from "astro:content";
+import MainLayout from "../components/layout/MainLayout.astro";
+import resumeData from "../data/resume.yaml";
 
 // Get resume data
-const resumeDataTyped = resumeData as any;
-const { experiences, personal } = resumeDataTyped;
+const resumeDataTyped = resumeData;
+const { experiences } = resumeDataTyped;
 const currentRole = experiences[0];
 
 // Get featured content
-const projects = await getCollection('projects');
+const projects = await getCollection("projects");
 const featuredProjects = projects
-  .filter((p) => p.data.featured)
-  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-  .slice(0, 3);
+	.filter((p) => p.data.featured)
+	.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+	.slice(0, 3);
 
-const blogPosts = await getCollection('blog');
+const blogPosts = await getCollection("blog");
 const latestPosts = blogPosts
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
-  .slice(0, 3);
+	.filter((p) => !p.data.draft)
+	.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+	.slice(0, 3);
 
-const photos = await getCollection('photos');
+const photos = await getCollection("photos");
 const featuredPhotos = photos
-  .filter((p: { data: { featured: any; }; }) => p.data.featured)
-  .slice(0, 6);
+	.filter((p: { data: { featured: any } }) => p.data.featured)
+	.slice(0, 6);
 ---
 
 <MainLayout title="Albert Wei - Data Engineer & Developer">
@@ -47,7 +46,7 @@ const featuredPhotos = photos
   <section id="about-preview" class="section">
     <div class="about-content content-narrow text-center">
       <h2>About Me</h2>
-      <p class="text-secondary text-lg mt-lg mb-lg">
+      <p class="text-secondary text-lg mt-lg mb-lg"> 
         I'm a {currentRole.role} based in NYC. Before that, I studied operations research at the University of Michigan class of 2022. 
         In my free time, you'll find me exploring with my camera, swimming, or cooking.
       </p>

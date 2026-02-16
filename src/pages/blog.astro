@@ -1,12 +1,11 @@
 ---
-import MainLayout from '../components/layout/MainLayout.astro';
-import { getCollection } from 'astro:content';
-import resumeData from '../data/resume.yaml';
+import { getCollection } from "astro:content";
+import MainLayout from "../components/layout/MainLayout.astro";
 
-const blogPosts = await getCollection('blog');
+const blogPosts = await getCollection("blog");
 const sortedPosts = blogPosts
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+	.filter((post) => !post.data.draft)
+	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 ---
 
 <MainLayout 
