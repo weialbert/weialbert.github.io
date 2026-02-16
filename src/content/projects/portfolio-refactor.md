@@ -2,7 +2,8 @@
 title: "Portfolio Website Refactor"
 description: "Rebuilt my portfolio using Astro with a modern design system and improved performance"
 techStack: ["Astro", "TypeScript", "CSS", "Git"]
-featured: true
+featured: false
+draft: true
 order: 1
 githubUrl: "https://github.com/weialbert/weialbert.github.io"
 liveUrl: "https://weialbert.github.io"

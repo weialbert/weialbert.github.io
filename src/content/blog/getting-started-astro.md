@@ -3,7 +3,7 @@ title: "Getting Started with Astro"
 description: "A comprehensive guide to building fast, modern websites with Astro"
 publishDate: 2026-02-14
 tags: ["Astro", "Web Development", "Tutorial"]
-draft: false
+draft: true
 image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80"
 ---
 
