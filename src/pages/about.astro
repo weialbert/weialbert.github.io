@@ -1,6 +1,5 @@
 ---
 import MainLayout from '../components/layout/MainLayout.astro';
-// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
 import resumeData from '../data/resume.yaml';
 
 interface Skill {
@@ -58,28 +57,29 @@ const currentRole = experiences[0];
   title="About Me - Albert Wei"
   description="Learn more about my background, skills, and interests"
 >
-  <article class="about-page">
-    <header class="page-header">
+  <article>
+    <!-- Page Header - uses global .page-header -->
+    <header class="page-header content-default">
       <h1>About Me</h1>
     </header>
 
-    <section class="intro-section">
-      <div class="intro-text">
-        <h2>Hi, I'm {personal.name}</h2>
-        <p>
-          I'm a {currentRole.role} at {currentRole.company}, passionate about building elegant solutions to complex data problems.
-          I specialize in data engineering, analytics, and modern infrastructure with experience spanning
-          petabyte-scale data systems, real-time pipelines, and cross-functional leadership.
-        </p>
-        <p>
-          Currently based in {personal.location}, I'm always eager to explore new technologies and mentor others
-          in the data and software engineering space.
-        </p>
-      </div>
+    <!-- Intro Section - uses global .content-default -->
+    <section class="content-default mb-3xl">
+      <h2 class="mb-lg">Hi, I'm {personal.name}</h2>
+      <p class="text-secondary text-lg mb-md" style="line-height: 1.8;">
+        I'm a {currentRole.role} passionate about solving large scale data problems. 
+        I specialize in data engineering, business analytics, and using modern infrastructure 
+        to directly serve business needs with implementation experience using the latest technologies in production data infrastructure.
+      </p>
+      <p class="text-secondary text-lg">
+        Currently based in {personal.location}, I'm always eager to explore new technologies and mentor others
+        in the data and software engineering space.
+      </p>
     </section>
 
-    <section class="education-section">
-      <h2>Education</h2>
+    <!-- Education Section - uses global .content-default and .education-item -->
+    <section class="content-default mb-3xl">
+      <h2 class="mb-xl">Education</h2>
       {education.map((school) => (
         <div class="education-item">
           <div class="education-header">
@@ -97,45 +97,16 @@ const currentRole = experiences[0];
                   {degree.details.map((detail) => <li>{detail}</li>)}
                 </ul>
               )}
-              {degree.gpa && <p class="gpa">GPA: {degree.gpa}</p>}
             </div>
           ))}
-          {school.awards && (
-            <div class="awards">
-              <p class="awards-title">Honors:</p>
-              <ul class="awards-list">
-                {school.awards.map((award) => <li>{award}</li>)}
-              </ul>
-            </div>
-          )}
         </div>
       ))}
     </section>
 
-    <section class="experience-section">
-      <h2>Experience</h2>
-      {experiences.slice(0, 3).map((exp) => (
-        <div class="experience-item">
-          <div class="experience-header">
-            <div>
-              <h3>{exp.role}</h3>
-              <p class="company">{exp.company}</p>
-            </div>
-            <span class="dates">{exp.start} – {exp.end === 'present' ? 'Present' : exp.end}</span>
-          </div>
-          <ul class="bullets">
-            {exp.bullets.slice(0, 3).map((bullet) => (
-              <li>{bullet.text}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-      <p class="view-all-link"><a href="/resume">View full resume →</a></p>
-    </section>
-
-    <section class="skills-section">
-      <h2>Skills & Technologies</h2>
-      <div class="skills-grid">
+    <!-- Skills Section - uses global .content-full and .skill-category -->
+    <section class="mb-3xl">
+      <h2 class="content-default mb-2xl">Skills</h2>
+      <div class="skills-grid content-full">
         {skills.map((skillGroup) => (
           <div class="skill-category">
             <h3>{skillGroup.category}</h3>
@@ -149,7 +120,8 @@ const currentRole = experiences[0];
       </div>
     </section>
 
-    <section class="cta-section">
+    <!-- CTA Section - uses global .cta-section -->
+    <section class="cta-section content-default">
       <h2>Let's Connect</h2>
       <p>Interested in working together or just want to say hi?</p>
       <a href="/contact" class="btn btn-primary">Get In Touch</a>
@@ -158,325 +130,70 @@ const currentRole = experiences[0];
 </MainLayout>
 
 <style>
-  .about-page {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .page-header {
-    margin-bottom: var(--space-3xl);
-  }
-
-  .page-header h1 {
-    font-size: var(--text-4xl);
-  }
-
-  /* Intro Section */
-  .intro-section {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-3xl);
-    margin-bottom: var(--space-3xl);
-  }
-
-  .intro-text h2 {
-    margin-bottom: var(--space-lg);
-  }
-
-  .intro-text p {
-    color: var(--color-text-secondary);
-    font-size: var(--text-lg);
-    line-height: 1.8;
-    margin-bottom: var(--space-md);
-  }
-
-  /* Skills Section */
-  .skills-section {
-    margin-bottom: var(--space-3xl);
-  }
-
+  /* ============================================================================
+     ABOUT PAGE - SPECIFIC STYLES
+     Most styles are now from global.css
+     ========================================================================= */
+  
+  /* ===== Skills Grid Layout (unique 2-column layout) ===== */
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-2xl);
-    margin-top: var(--space-2xl);
   }
-
-  .skill-category h3 {
-    margin-bottom: var(--space-md);
-    color: var(--color-accent);
-  }
-
-  .skill-category ul {
-    list-style: none;
-  }
-
-  .skill-category li {
-    padding: var(--space-sm) 0;
-    color: var(--color-text-secondary);
-  }
-
-  .skill-category li::before {
-    content: '→ ';
-    color: var(--color-accent);
-    margin-right: var(--space-sm);
-  }
-
-  /* Education Section */
-  .education-section {
-    margin-bottom: var(--space-3xl);
-  }
-
-  .education-item {
-    margin-bottom: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .education-item:last-child {
-    border-bottom: none;
-  }
-
-  .education-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-lg);
-    margin-bottom: var(--space-md);
-  }
-
-  .education-header h3 {
-    margin: 0;
-  }
-
-  .location {
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-  }
-
+  
+  /* ===== Education Degree Styles (unique nested structure) ===== */
   .degree {
     margin-left: var(--space-lg);
     margin-bottom: var(--space-lg);
   }
-
+  
   .degree-info {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     gap: var(--space-lg);
   }
-
+  
   .degree-name {
     margin: 0 0 var(--space-sm) 0;
     font-weight: 500;
     color: var(--color-text-primary);
   }
-
+  
   .degree-years {
     color: var(--color-text-secondary);
     font-size: var(--text-sm);
     margin: 0;
   }
-
+  
   .degree-details {
     list-style: none;
     padding: 0;
     margin: var(--space-sm) 0;
   }
-
+  
   .degree-details li {
     color: var(--color-text-secondary);
     font-size: var(--text-sm);
     padding: var(--space-xs) 0;
   }
-
+  
   .degree-details li::before {
     content: '• ';
     color: var(--color-accent);
     margin-right: var(--space-xs);
   }
-
-  .gpa {
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-    margin: var(--space-sm) 0 0 0;
-  }
-
-  .awards {
-    margin-top: var(--space-md);
-  }
-
-  .awards-title {
-    margin: 0 0 var(--space-sm) 0;
-    font-weight: 500;
-    font-size: var(--text-sm);
-    color: var(--color-accent);
-  }
-
-  .awards-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .awards-list li {
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-    padding: var(--space-xs) 0;
-  }
-
-  .awards-list li::before {
-    content: '✓ ';
-    color: var(--color-accent);
-    margin-right: var(--space-xs);
-  }
-
-  /* Experience Section */
-  .experience-section {
-    margin-bottom: var(--space-3xl);
-  }
-
-  .experience-item {
-    margin-bottom: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .experience-item:last-child {
-    border-bottom: none;
-  }
-
-  .experience-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--space-lg);
-    margin-bottom: var(--space-md);
-  }
-
-  .experience-header h3 {
-    margin: 0 0 var(--space-xs) 0;
-  }
-
-  .company {
-    margin: 0;
-    color: var(--color-accent);
-    font-size: var(--text-sm);
-    font-weight: 500;
-  }
-
-  .dates {
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-    white-space: nowrap;
-  }
-
-  .bullets {
-    list-style: none;
-    padding: 0;
-    margin: var(--space-md) 0 0 0;
-  }
-
-  .bullets li {
-    color: var(--color-text-secondary);
-    padding: var(--space-sm) 0;
-    line-height: 1.6;
-  }
-
-  .bullets li::before {
-    content: '→ ';
-    color: var(--color-accent);
-    margin-right: var(--space-sm);
-  }
-
-  .view-all-link {
-    text-align: center;
-    margin-top: var(--space-2xl);
-  }
-
-  .view-all-link a {
-    color: var(--color-accent);
-    text-decoration: none;
-    font-weight: 500;
-    transition: opacity var(--transition-fast);
-  }
-
-  .view-all-link a:hover {
-    opacity: 0.8;
-  }
-
-  .interests-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-lg);
-    margin-top: var(--space-2xl);
-  }
-
-  .interest-card {
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
-  }
-
-  .interest-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-  }
-
-  .interest-card h3 {
-    margin-bottom: var(--space-md);
-  }
-
-  .interest-card p {
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  /* CTA Section */
-  .cta-section {
-    text-align: center;
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-3xl);
-    border-radius: var(--radius-xl);
-  }
-
-  .cta-section h2 {
-    margin-bottom: var(--space-md);
-  }
-
-  .cta-section p {
-    color: var(--color-text-secondary);
-    font-size: var(--text-lg);
-    margin-bottom: var(--space-xl);
-  }
-
-  .btn {
-    display: inline-block;
-    padding: var(--space-md) var(--space-xl);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all var(--transition-fast);
-  }
-
-  .btn-primary {
-    background-color: var(--color-accent);
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background-color: var(--color-accent-hover);
-  }
-
+  
+  /* ===== Responsive Design ===== */
   @media (max-width: 768px) {
-    .page-header h1 {
-      font-size: var(--text-3xl);
+    .skills-grid {
+      grid-template-columns: 1fr;
     }
-
-    .intro-section {
-      gap: var(--space-2xl);
+    
+    .degree-info {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>

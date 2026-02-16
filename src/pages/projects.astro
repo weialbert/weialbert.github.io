@@ -14,16 +14,16 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
   title="Projects - Albert Wei"
   description="View my portfolio of projects and work"
 >
-  <article class="projects-page">
-    <header class="page-header">
+  <article>
+    <header class="page-header content-default">
       <h1>My Projects</h1>
       <p>A collection of projects I've built and contributed to.</p>
     </header>
 
     {sortedProjects.length > 0 ? (
-      <div class="projects-grid">
+      <div class="grid-1 content-wide">
         {sortedProjects.map((project) => (
-          <article class="project-card">
+          <article class="project-card-horizontal">
             <a href={`/projects/${project.slug}`} class="project-link">
               {project.data.image && (
                 <div class="project-image">
@@ -32,9 +32,9 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
               )}
               <div class="project-body">
                 <h2>{project.data.title}</h2>
-                <p>{project.data.description}</p>
+                <p class="text-secondary mb-lg">{project.data.description}</p>
                 
-                <div class="project-tech">
+                <div class="tag-group mb-lg">
                   {project.data.techStack.map((tech) => (
                     <span class="tech-tag">{tech}</span>
                   ))}
@@ -58,7 +58,7 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
         ))}
       </div>
     ) : (
-      <div class="empty-state">
+      <div class="empty-state content-default">
         <p>No projects yet. Check back soon!</p>
       </div>
     )}
@@ -66,32 +66,7 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
 </MainLayout>
 
 <style>
-  .projects-page {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  .page-header {
-    margin-bottom: var(--space-3xl);
-  }
-
-  .page-header h1 {
-    font-size: var(--text-4xl);
-    margin-bottom: var(--space-md);
-  }
-
-  .page-header p {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-  }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-2xl);
-  }
-
-  .project-card {
+  .project-card-horizontal {
     background-color: var(--color-card-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -99,7 +74,7 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
     transition: transform var(--transition-base), box-shadow var(--transition-base);
   }
 
-  .project-card:hover {
+  .project-card-horizontal:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
   }
@@ -125,7 +100,7 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
     transition: transform var(--transition-base);
   }
 
-  .project-card:hover .project-image img {
+  .project-card-horizontal:hover .project-image img {
     transform: scale(1.05);
   }
 
@@ -141,24 +116,7 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
   }
 
   .project-body > p {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-lg);
     flex-grow: 1;
-  }
-
-  .project-tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-lg);
-  }
-
-  .tech-tag {
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
   }
 
   .project-links {
@@ -166,28 +124,7 @@ const sortedProjects = projects.sort((a, b) => (a.data.order || 0) - (b.data.ord
     gap: var(--space-md);
   }
 
-  .link {
-    color: var(--color-accent);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color var(--transition-fast);
-  }
-
-  .link:hover {
-    color: var(--color-accent-hover);
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: var(--space-3xl);
-    color: var(--color-text-secondary);
-  }
-
   @media (max-width: 768px) {
-    .page-header h1 {
-      font-size: var(--text-3xl);
-    }
-
     .project-link {
       grid-template-columns: 1fr;
     }

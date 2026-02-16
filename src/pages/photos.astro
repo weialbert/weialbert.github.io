@@ -14,16 +14,16 @@ const sortedPhotos = photos.sort((a, b) => b.data.date.valueOf() - a.data.date.v
   title="Photography - Albert Wei"
   description="Browse my photography portfolio"
 >
-  <article class="photos-page">
-    <header class="page-header">
+  <article>
+    <header class="page-header content-default">
       <h1>Photography</h1>
       <p>A collection of moments captured through my lens.</p>
     </header>
 
     {sortedPhotos.length > 0 ? (
-      <div class="photo-grid">
+      <div class="photo-grid content-wide">
         {sortedPhotos.map((photo) => (
-          <a href={`/photos/${photo.slug}`} class="photo-card">
+          <a href={`/photos/${photo.slug}`} class="photo-item">
             <img src={photo.data.image} alt={photo.data.title} loading="lazy" />
             <div class="photo-overlay">
               <h3>{photo.data.title}</h3>
@@ -43,95 +43,4 @@ const sortedPhotos = photos.sort((a, b) => b.data.date.valueOf() - a.data.date.v
 </MainLayout>
 
 <style>
-  .photos-page {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .page-header {
-    margin-bottom: var(--space-3xl);
-  }
-
-  .page-header h1 {
-    font-size: var(--text-4xl);
-    margin-bottom: var(--space-md);
-  }
-
-  .page-header p {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-  }
-
-  .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-lg);
-  }
-
-  .photo-card {
-    position: relative;
-    aspect-ratio: 1;
-    overflow: hidden;
-    border-radius: var(--radius-lg);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
-  }
-
-  .photo-card:hover {
-    transform: scale(1.02);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .photo-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-base);
-  }
-
-  .photo-card:hover img {
-    transform: scale(1.05);
-  }
-
-  .photo-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    padding: var(--space-xl);
-    color: white;
-    opacity: 0;
-    transition: opacity var(--transition-base);
-  }
-
-  .photo-card:hover .photo-overlay {
-    opacity: 1;
-  }
-
-  .photo-overlay h3 {
-    margin-bottom: var(--space-sm);
-    font-size: var(--text-lg);
-  }
-
-  .location {
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: var(--space-3xl);
-    color: var(--color-text-secondary);
-  }
-
-  @media (max-width: 768px) {
-    .page-header h1 {
-      font-size: var(--text-3xl);
-    }
-
-    .photo-grid {
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: var(--space-md);
-    }
-  }
 </style>

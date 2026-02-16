@@ -10,15 +10,15 @@ const { personal } = resumeData;
   title="Contact - Albert Wei"
   description="Get in touch with me"
 >
-  <article class="contact-page">
+  <article class="content-default">
     <header class="page-header">
       <h1>Let's Talk</h1>
       <p>Have a question or proposal? I'd love to hear from you.</p>
     </header>
 
     <div class="contact-container">
-      <section class="contact-form-section">
-        <h2>Send me a Message</h2>
+      <section class="card">
+        <h2 class="mb-lg">Send me a Message</h2>
         <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
           <div class="form-group">
             <label for="name">Name</label>
@@ -40,12 +40,12 @@ const { personal } = resumeData;
             <textarea id="message" name="message" rows="6" required></textarea>
           </div>
 
-          <button type="submit" class="btn btn-primary">Send Message</button>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
         </form>
       </section>
 
-      <section class="contact-info-section">
-        <h2>Connect With Me</h2>
+      <section class="contact-info">
+        <h2 class="mb-lg">Connect With Me</h2>
         <div class="contact-links">
           <a href={`https://${personal.github}`} target="_blank" rel="noopener noreferrer" class="contact-link">
             <span class="link-label">GitHub</span>
@@ -66,80 +66,10 @@ const { personal } = resumeData;
 </MainLayout>
 
 <style>
-  .contact-page {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .page-header {
-    margin-bottom: var(--space-3xl);
-  }
-
-  .page-header h1 {
-    font-size: var(--text-4xl);
-    margin-bottom: var(--space-md);
-  }
-
-  .page-header p {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-  }
-
   .contact-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3xl);
-  }
-
-  /* Form Section */
-  .contact-form-section {
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-  }
-
-  .contact-form-section h2 {
-    margin-bottom: var(--space-lg);
-  }
-
-  .form-group {
-    margin-bottom: var(--space-lg);
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: var(--space-sm);
-    font-weight: 500;
-    color: var(--color-text);
-  }
-
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: var(--space-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: inherit;
-    font-size: var(--text-base);
-    transition: border-color var(--transition-fast);
-  }
-
-  .form-group input:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: var(--color-accent);
-  }
-
-  .contact-form button {
-    width: 100%;
-  }
-
-  /* Info Section */
-  .contact-info-section h2 {
-    margin-bottom: var(--space-lg);
   }
 
   .contact-links {
@@ -174,32 +104,7 @@ const { personal } = resumeData;
     font-weight: 700;
   }
 
-  .btn {
-    display: inline-block;
-    padding: var(--space-md) var(--space-xl);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all var(--transition-fast);
-    border: none;
-    cursor: pointer;
-    font-size: var(--text-base);
-  }
-
-  .btn-primary {
-    background-color: var(--color-accent);
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background-color: var(--color-accent-hover);
-  }
-
   @media (max-width: 768px) {
-    .page-header h1 {
-      font-size: var(--text-3xl);
-    }
-
     .contact-container {
       grid-template-columns: 1fr;
       gap: var(--space-xl);

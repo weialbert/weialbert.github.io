@@ -78,13 +78,17 @@ const currentPath = Astro.url.pathname;
   mobileToggle?.addEventListener('click', toggleMobileMenu);
   overlay?.addEventListener('click', closeMobileMenu);
   
-  // Close drawer on nav click
+  // Close drawer on nav click (better mobile UX)
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', closeMobileMenu);
   });
 </script>
 
 <style>
+  /* ============================================================================
+     SIDEBAR LAYOUT
+     ========================================================================= */
+  
   .sidebar {
     position: fixed;
     top: 0;
@@ -95,11 +99,11 @@ const currentPath = Astro.url.pathname;
     border-right: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    transition: width var(--transition-base);
     z-index: 1000;
     overflow: hidden;
   }
   
+  /* ===== Sidebar Header ===== */
   .sidebar-header {
     padding: var(--space-lg);
     border-bottom: 1px solid var(--color-border);
@@ -115,26 +119,16 @@ const currentPath = Astro.url.pathname;
     font-weight: 700;
     color: var(--color-text);
     white-space: nowrap;
-    transition: opacity var(--transition-base);
+    transition: color var(--transition-fast);
   }
   
-  .sidebar-toggle {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: var(--space-sm);
-    color: var(--color-text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-md);
-    transition: background-color var(--transition-fast);
-    flex-shrink: 0;
+  .logo:hover {
+    color: var(--color-accent);
   }
   
-  .sidebar-toggle:hover {
-    background-color: var(--color-bg-secondary);
-  }
+  /* ============================================================================
+     NAVIGATION
+     ========================================================================= */
   
   .sidebar-nav {
     flex: 1;
@@ -144,8 +138,11 @@ const currentPath = Astro.url.pathname;
   
   .sidebar-nav ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
   }
   
+  /* ===== Navigation Links ===== */
   .nav-link {
     display: flex;
     align-items: center;
@@ -162,6 +159,7 @@ const currentPath = Astro.url.pathname;
     color: var(--color-text);
   }
   
+  /* ===== Active State ===== */
   .nav-link.active {
     color: var(--color-accent);
     background-color: var(--color-bg-secondary);
@@ -177,6 +175,7 @@ const currentPath = Astro.url.pathname;
     background-color: var(--color-accent);
   }
   
+  /* ===== Navigation Icon & Label ===== */
   .nav-icon {
     width: 20px;
     height: 20px;
@@ -186,10 +185,13 @@ const currentPath = Astro.url.pathname;
   
   .nav-label {
     white-space: nowrap;
-    transition: opacity var(--transition-fast);
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  
+  /* ============================================================================
+     SIDEBAR FOOTER
+     ========================================================================= */
   
   .sidebar-footer {
     padding: var(--space-lg);
@@ -197,51 +199,16 @@ const currentPath = Astro.url.pathname;
     flex-shrink: 0;
   }
   
-  /* Collapsed state (desktop) */
-  @media (min-width: 769px) {
-    /* Collapsed state removed - sidebar is always visible */
-  }
+  /* ============================================================================
+     MOBILE STYLES
+     ========================================================================= */
   
-  /* Mobile styles */
-  @media (max-width: 768px) {
-    .sidebar {
-      width: var(--sidebar-width);
-      transform: translateX(-100%);
-      transition: transform var(--transition-base);
-    }
-    
-    .sidebar.mobile-open {
-      transform: translateX(0);
-    }
-  }
-  
+  /* ===== Mobile Menu Toggle Button ===== */
   .mobile-menu-toggle {
     display: none;
   }
   
-  @media (max-width: 768px) {
-    .mobile-menu-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      background-color: var(--color-card-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      color: var(--color-text);
-      width: 40px;
-      height: 40px;
-      z-index: 999;
-    }
-    
-    .mobile-menu-toggle:hover {
-      background-color: var(--color-bg-secondary);
-    }
-  }
-  
+  /* ===== Mobile Overlay (backdrop) ===== */
   .sidebar-overlay {
     display: none;
     position: fixed;
@@ -256,6 +223,41 @@ const currentPath = Astro.url.pathname;
   }
   
   @media (max-width: 768px) {
+    /* ===== Hide sidebar off-screen by default ===== */
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform var(--transition-base);
+    }
+    
+    /* ===== Show sidebar when mobile-open ===== */
+    .sidebar.mobile-open {
+      transform: translateX(0);
+    }
+    
+    /* ===== Show mobile menu toggle button ===== */
+    .mobile-menu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: var(--space-md);
+      left: var(--space-md);
+      background-color: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--color-text);
+      width: 40px;
+      height: 40px;
+      z-index: 999;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .mobile-menu-toggle:hover {
+      background-color: var(--color-bg-secondary);
+    }
+    
+    /* ===== Show overlay when active ===== */
     .sidebar-overlay.active {
       display: block;
       opacity: 1;

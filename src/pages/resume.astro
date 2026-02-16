@@ -22,17 +22,17 @@ const profiles = [
   title="Resume - Albert Wei"
   description="Download my resume"
 >
-  <article class="resume-page">
+  <article class="content-default">
     <header class="page-header">
       <h1>Resume</h1>
       <p>View my work history, conveniently filtered using different profiles.</p>
     </header>
 
-    <div class="resume-grid">
+    <div class="grid-auto-fit">
       {profiles.map(({ name, label, description }) => (
-        <article class="profile-card">
+        <article class="card">
           <h2>{label}</h2>
-          <p class="description">{description}</p>
+          <p class="text-secondary mb-lg">{description}</p>
 
           <div class="download-links">
             <a href={`/resume/${name}/resume.pdf`} target="_blank" class="btn btn-primary">
@@ -49,92 +49,9 @@ const profiles = [
 </MainLayout>
 
 <style>
-  .resume-page {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .page-header {
-    margin-bottom: var(--space-3xl);
-  }
-
-  .page-header h1 {
-    font-size: var(--text-4xl);
-    margin-bottom: var(--space-md);
-  }
-
-  .page-header p {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-  }
-
-  .resume-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-xl);
-  }
-
-  .profile-card {
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
-  }
-
-  .profile-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .profile-card h2 {
-    margin-bottom: var(--space-md);
-  }
-
-  .description {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-lg);
-  }
-
   .download-links {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-  }
-
-  .btn {
-    display: inline-block;
-    padding: var(--space-md) var(--space-xl);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all var(--transition-fast);
-    text-align: center;
-  }
-
-  .btn-primary {
-    background-color: var(--color-accent);
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background-color: var(--color-accent-hover);
-  }
-
-  .btn-secondary {
-    background-color: transparent;
-    color: var(--color-accent);
-    border: 2px solid var(--color-accent);
-  }
-
-  .btn-secondary:hover {
-    background-color: var(--color-accent);
-    color: white;
-  }
-
-  @media (max-width: 768px) {
-    .page-header h1 {
-      font-size: var(--text-3xl);
-    }
   }
 </style>

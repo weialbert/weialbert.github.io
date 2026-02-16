@@ -29,17 +29,13 @@ const featuredPhotos = photos
 ---
 
 <MainLayout title="Albert Wei - Data Engineer & Developer">
-  <!-- Hero Section -->
+  <!-- Hero Section - uses global .hero classes -->
   <section id="hero" class="hero">
     <div class="hero-content">
       <h1 class="hero-title">Hi, I'm Albert Wei</h1>
       <p class="hero-subtitle">
         I'm currently a: &ensp; <code>{currentRole.role}</code>
       </p>
-      <!-- <p class="hero-description">
-        You'll find my work history and side projects here.<br>
-        If you're looking for food pics or my travel pictures, you'll also find that here.
-      </p> -->
       <div class="hero-cta">
         <a href="/projects" class="btn btn-primary">View My Work</a>
         <a href="/contact" class="btn btn-secondary">Get In Touch</a>
@@ -47,11 +43,11 @@ const featuredPhotos = photos
     </div>
   </section>
 
-  <!-- Quick About -->
+  <!-- Quick About - uses global .section -->
   <section id="about-preview" class="section">
-    <div class="about-content">
+    <div class="about-content content-narrow text-center">
       <h2>About Me</h2>
-      <p>
+      <p class="text-secondary text-lg mt-lg mb-lg">
         I'm a {currentRole.role} based in NYC. Before that, I studied operations research at the University of Michigan class of 2022. 
         In my free time, you'll find me exploring with my camera, swimming, or cooking.
       </p>
@@ -59,7 +55,7 @@ const featuredPhotos = photos
     </div>
   </section>
 
-  <!-- Featured Projects -->
+  <!-- Featured Projects - uses global .section, .section-header, .project-card -->
   {featuredProjects.length > 0 && (
     <section id="projects" class="section">
       <div class="section-header">
@@ -67,7 +63,7 @@ const featuredPhotos = photos
         <a href="/projects" class="section-link">View All →</a>
       </div>
       
-      <div class="project-grid">
+      <div class="grid-auto-fit">
         {featuredProjects.map((project) => (
           <article class="project-card">
             <a href={`/projects/${project.slug}`}>
@@ -90,7 +86,7 @@ const featuredPhotos = photos
     </section>
   )}
 
-  <!-- Latest Blog Posts -->
+  <!-- Latest Blog Posts - uses global .section, .blog-card -->
   {latestPosts.length > 0 && (
     <section id="blog" class="section">
       <div class="section-header">
@@ -98,7 +94,7 @@ const featuredPhotos = photos
         <a href="/blog" class="section-link">View All →</a>
       </div>
       
-      <div class="blog-grid">
+      <div class="grid-auto-fit">
         {latestPosts.map((post: { slug: any; data: { publishDate: { toISOString: () => string | null | undefined; toLocaleDateString: (arg0: string, arg1: { year: string; month: string; day: string; }) => unknown; }; title: unknown; description: unknown; tags: any[]; }; }) => (
           <article class="blog-card">
             <a href={`/blog/${post.slug}`}>
@@ -111,7 +107,7 @@ const featuredPhotos = photos
               </time>
               <h3>{post.data.title}</h3>
               <p>{post.data.description}</p>
-              <div class="post-tags">
+              <div class="tag-group mt-md">
                 {post.data.tags.slice(0, 3).map((tag: unknown) => (
                   <span class="tag">{tag}</span>
                 ))}
@@ -123,7 +119,7 @@ const featuredPhotos = photos
     </section>
   )}
 
-  <!-- Photo Showcase -->
+  <!-- Photo Showcase - uses global .section, .photo-grid, .photo-item -->
   {featuredPhotos.length > 0 && (
     <section id="photos" class="section">
       <div class="section-header">
@@ -144,290 +140,10 @@ const featuredPhotos = photos
     </section>
   )}
 
-  <!-- Contact CTA -->
+  <!-- Contact CTA - uses global .cta-section -->
   <section id="contact-cta" class="section cta-section">
     <h2>Let's Work Together</h2>
     <p>Have a project in mind? Let's chat about how we can collaborate.</p>
     <a href="/contact" class="btn btn-primary">Contact Me</a>
   </section>
 </MainLayout>
-
-<style>
-  /* Hero Section */
-  .hero {
-    min-height: 60vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: var(--space-3xl) 0;
-  }
-  
-  .hero-content {
-    max-width: 800px;
-  }
-  
-  .hero-title {
-    font-size: var(--text-4xl);
-    margin-bottom: var(--space-md);
-  }
-  
-  .hero-subtitle {
-    font-size: var(--text-xl);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-lg);
-  }
-  
-  .hero-description {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-xl);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .hero-cta {
-    display: flex;
-    gap: var(--space-md);
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  /* Sections */
-  .section {
-    padding: var(--space-3xl) 0;
-  }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-xl);
-  }
-  
-  .section-link {
-    color: var(--color-accent);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color var(--transition-fast);
-  }
-  
-  .section-link:hover {
-    color: var(--color-accent-hover);
-  }
-  
-  /* Project Grid */
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-xl);
-  }
-  
-  .project-card {
-    background-color: var(--color-card-bg);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
-  }
-  
-  .project-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .project-card a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .project-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .project-content {
-    padding: var(--space-lg);
-  }
-  
-  .project-tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-top: var(--space-md);
-  }
-  
-  .tech-tag {
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
-  }
-  
-  /* Blog Grid */
-  .blog-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-xl);
-  }
-  
-  .blog-card {
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
-  }
-  
-  .blog-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .blog-card a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .blog-card time {
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-  }
-  
-  .blog-card h3 {
-    margin: var(--space-md) 0;
-  }
-  
-  .post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-top: var(--space-md);
-  }
-  
-  .tag {
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
-  }
-  
-  /* Photo Grid */
-  .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-md);
-  }
-  
-  .photo-item {
-    position: relative;
-    aspect-ratio: 1;
-    overflow: hidden;
-    border-radius: var(--radius-md);
-  }
-  
-  .photo-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-base);
-  }
-  
-  .photo-item:hover img {
-    transform: scale(1.05);
-  }
-  
-  .photo-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-    padding: var(--space-lg);
-    color: white;
-    opacity: 0;
-    transition: opacity var(--transition-base);
-  }
-  
-  .photo-item:hover .photo-overlay {
-    opacity: 1;
-  }
-  
-  /* About Preview */
-  .about-content {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  
-  .about-content p {
-    margin: var(--space-lg) 0;
-    color: var(--color-text-secondary);
-    font-size: var(--text-lg);
-  }
-  
-  /* CTA Section */
-  .cta-section {
-    text-align: center;
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-3xl);
-    border-radius: var(--radius-xl);
-  }
-  
-  .cta-section h2 {
-    margin-bottom: var(--space-md);
-  }
-  
-  .cta-section p {
-    color: var(--color-text-secondary);
-    font-size: var(--text-lg);
-    margin-bottom: var(--space-xl);
-  }
-  
-  /* Buttons */
-  .btn {
-    display: inline-block;
-    padding: var(--space-md) var(--space-xl);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all var(--transition-fast);
-  }
-  
-  .btn-primary {
-    background-color: var(--color-accent);
-    color: white;
-  }
-  
-  .btn-primary:hover {
-    background-color: var(--color-accent-hover);
-  }
-  
-  .btn-secondary {
-    background-color: transparent;
-    color: var(--color-accent);
-    border: 2px solid var(--color-accent);
-  }
-  
-  .btn-secondary:hover {
-    background-color: var(--color-accent);
-    color: white;
-  }
-
-  @media (max-width: 768px) {
-    .hero {
-      min-height: 60vh;
-      padding: var(--space-2xl) 0;
-    }
-    
-    .section-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-md);
-    }
-  }
-</style>
