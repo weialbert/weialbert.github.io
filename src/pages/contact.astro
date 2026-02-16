@@ -1,6 +1,5 @@
 ---
 import MainLayout from '../components/layout/MainLayout.astro';
-// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
 import resumeData from '../data/resume.yaml';
 
 const { personal } = resumeData;
@@ -19,7 +18,12 @@ const { personal } = resumeData;
     <div class="contact-container">
       <section class="card">
         <h2 class="mb-lg">Send me a Message</h2>
-        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" id="contact-form">
+          <input type="hidden" name="access_key" value="b3cf0363-ca58-403c-8e6a-d7adf25c25f1" />
+          <input type="hidden" name="subject" value="New Contact Form Submission from Portfolio" />
+          <input type="hidden" name="from_name" value="Portfolio Contact Form" />
+          <input type="checkbox" name="botcheck" style="display: none;" />
+          
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required />
@@ -31,16 +35,13 @@ const { personal } = resumeData;
           </div>
 
           <div class="form-group">
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" required />
-          </div>
-
-          <div class="form-group">
             <label for="message">Message</label>
             <textarea id="message" name="message" rows="6" required></textarea>
           </div>
 
           <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+          
+          <div id="form-status" class="form-status"></div>
         </form>
       </section>
 
@@ -104,6 +105,47 @@ const { personal } = resumeData;
     font-weight: 700;
   }
 
+  .form-fallback {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .form-status {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    text-align: center;
+    display: none;
+  }
+
+  .form-status.success {
+    display: block;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .form-status.error {
+    display: block;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  [data-theme="dark"] .form-status.success {
+    background-color: #1e4620;
+    color: #b7e4c7;
+    border-color: #2d5a30;
+  }
+
+  [data-theme="dark"] .form-status.error {
+    background-color: #4a1c1c;
+    color: #f8d7da;
+    border-color: #6b2929;
+  }
+
   @media (max-width: 768px) {
     .contact-container {
       grid-template-columns: 1fr;
@@ -111,3 +153,45 @@ const { personal } = resumeData;
     }
   }
 </style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const formStatus = document.getElementById('form-status');
+  const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!submitButton || !formStatus) return;
+    
+    const originalButtonText = submitButton.textContent;
+    submitButton.textContent = 'Sending...';
+    submitButton.disabled = true;
+    formStatus.style.display = 'none';
+    formStatus.className = 'form-status';
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        formStatus.textContent = 'Thank you! Your message has been sent successfully. I\'ll get back to you soon!';
+        formStatus.classList.add('success');
+        form.reset();
+      } else {
+        throw new Error(data.message || 'Something went wrong');
+      }
+    } catch (error) {
+      formStatus.textContent = 'Oops! Something went wrong. Please try again or email me directly.';
+      formStatus.classList.add('error');
+    } finally {
+      submitButton.textContent = originalButtonText;
+      submitButton.disabled = false;
+    }
+  });
+</script>
