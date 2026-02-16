@@ -1,0 +1,199 @@
+---
+import MainLayout from '../components/layout/MainLayout.astro';
+import resumeData from '../data/resume.yaml';
+
+interface Skill {
+  category: string;
+  items: string[];
+}
+
+interface Award {
+  [key: string]: any;
+}
+
+interface SchoolDegree {
+  degree: string;
+  start: number;
+  end: number;
+  gpa?: string;
+  details?: string[];
+}
+
+interface School {
+  institution: string;
+  location: string;
+  degrees: SchoolDegree[];
+  awards?: (string | Award)[];
+}
+
+interface Bullet {
+  id: string;
+  text: string;
+  importance: number;
+  tags: string[];
+}
+
+interface Experience {
+  id: string;
+  company: string;
+  role: string;
+  location: string;
+  start: number;
+  end: string | number;
+  tags: string[];
+  bullets: Bullet[];
+}
+
+const { personal, skills, education, experiences } = resumeData as {
+  personal: any;
+  skills: Skill[];
+  education: School[];
+  experiences: Experience[];
+};
+const currentRole = experiences[0];
+---
+
+<MainLayout 
+  title="About Me - Albert Wei"
+  description="Learn more about my background, skills, and interests"
+>
+  <article>
+    <!-- Page Header - uses global .page-header -->
+    <header class="page-header content-default">
+      <h1>About Me</h1>
+    </header>
+
+    <!-- Intro Section - uses global .content-default -->
+    <section class="content-default mb-3xl">
+      <h2 class="mb-lg">Hi, I'm {personal.name}</h2>
+      <p class="text-secondary text-lg mb-md" style="line-height: 1.8;">
+        I'm a {currentRole.role} passionate about solving large scale data problems. 
+        I specialize in data engineering, business analytics, and using modern infrastructure 
+        to directly serve business needs with implementation experience using the latest technologies in production data infrastructure.
+      </p>
+      <p class="text-secondary text-lg">
+        Currently based in {personal.location}, I'm always eager to explore new technologies and mentor others
+        in the data and software engineering space.
+      </p>
+    </section>
+
+    <!-- Education Section - uses global .content-default and .education-item -->
+    <section class="content-default mb-3xl">
+      <h2 class="mb-xl">Education</h2>
+      {education.map((school) => (
+        <div class="education-item">
+          <div class="education-header">
+            <h3>{school.institution}</h3>
+            <span class="location">{school.location}</span>
+          </div>
+          {school.degrees.map((degree) => (
+            <div class="degree">
+              <div class="degree-info">
+                <p class="degree-name">{degree.degree}</p>
+                <p class="degree-years">{degree.start} – {degree.end}</p>
+              </div>
+              {degree.details && (
+                <ul class="degree-details">
+                  {degree.details.map((detail) => <li>{detail}</li>)}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      ))}
+    </section>
+
+    <!-- Skills Section - uses global .content-full and .skill-category -->
+    <section class="mb-3xl">
+      <h2 class="content-default mb-2xl">Skills</h2>
+      <div class="skills-grid content-full">
+        {skills.map((skillGroup) => (
+          <div class="skill-category">
+            <h3>{skillGroup.category}</h3>
+            <ul>
+              {skillGroup.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA Section - uses global .cta-section -->
+    <section class="cta-section content-default">
+      <h2>Let's Connect</h2>
+      <p>Interested in working together or just want to say hi?</p>
+      <a href="/contact" class="btn btn-primary">Get In Touch</a>
+    </section>
+  </article>
+</MainLayout>
+
+<style>
+  /* ============================================================================
+     ABOUT PAGE - SPECIFIC STYLES
+     Most styles are now from global.css
+     ========================================================================= */
+  
+  /* ===== Skills Grid Layout (unique 2-column layout) ===== */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2xl);
+  }
+  
+  /* ===== Education Degree Styles (unique nested structure) ===== */
+  .degree {
+    margin-left: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .degree-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-lg);
+  }
+  
+  .degree-name {
+    margin: 0 0 var(--space-sm) 0;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+  
+  .degree-years {
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  
+  .degree-details {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-sm) 0;
+  }
+  
+  .degree-details li {
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    padding: var(--space-xs) 0;
+  }
+  
+  .degree-details li::before {
+    content: '• ';
+    color: var(--color-accent);
+    margin-right: var(--space-xs);
+  }
+  
+  /* ===== Responsive Design ===== */
+  @media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .degree-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

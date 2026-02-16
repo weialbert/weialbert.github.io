@@ -1,0 +1,84 @@
+---
+// Theme toggle button component
+---
+
+<button
+  id="theme-toggle"
+  aria-label="Toggle theme"
+  class="theme-toggle"
+>
+  <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/>
+    <line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/>
+    <line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+  <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
+<script>
+  import { initTheme, setTheme } from '../lib/theme/theme';
+  
+  // Initialize theme on page load
+  initTheme();
+  
+  // Toggle theme on button click
+  const toggle = document.getElementById('theme-toggle');
+  toggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
+    const next = current === 'light' ? 'dark' : 'light';
+    setTheme(next);
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast);
+    color: var(--color-text);
+  }
+  
+  .theme-toggle:hover {
+    background-color: var(--color-bg-secondary);
+  }
+  
+  .sun-icon,
+  .moon-icon {
+    position: absolute;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+  
+  [data-theme="light"] .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  
+  [data-theme="light"] .moon-icon {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+  
+  [data-theme="dark"] .sun-icon {
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
+  
+  [data-theme="dark"] .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+</style>

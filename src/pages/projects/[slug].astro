@@ -1,0 +1,221 @@
+---
+import MainLayout from '../../components/layout/MainLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<MainLayout 
+  title={`${project.data.title} - Projects`}
+  description={project.data.description}
+  image={project.data.image}
+>
+  <article class="project-detail">
+    <header class="project-header">
+      <a href="/projects" class="back-link">← Back to Projects</a>
+      
+      <h1>{project.data.title}</h1>
+      
+      <div class="project-meta">
+        <div class="tech-stack">
+          {project.data.techStack.map((tech) => (
+            <span class="tech-tag">{tech}</span>
+          ))}
+        </div>
+        
+        <div class="project-actions">
+          {project.data.githubUrl && (
+            <a href={project.data.githubUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+              View on GitHub
+            </a>
+          )}
+          {project.data.liveUrl && (
+            <a href={project.data.liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              Live Demo
+            </a>
+          )}
+        </div>
+      </div>
+    </header>
+
+    {project.data.image && (
+      <div class="project-hero-image">
+        <img src={project.data.image} alt={project.data.title} />
+      </div>
+    )}
+
+    <div class="project-body">
+      <Content />
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  .project-detail {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .back-link {
+    display: inline-block;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    margin-bottom: var(--space-lg);
+    transition: color var(--transition-fast);
+  }
+  
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+  
+  .project-header h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+  }
+  
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+  
+  .tech-tag {
+    background-color: var(--color-bg-secondary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+  
+  .project-actions {
+    display: flex;
+    gap: var(--space-md);
+  }
+  
+  .btn {
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-accent);
+    color: white;
+  }
+  
+  .project-hero-image {
+    margin-bottom: var(--space-2xl);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  
+  .project-hero-image img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .project-body {
+    line-height: 1.8;
+  }
+  
+  .project-body :global(h2) {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-lg);
+    font-size: var(--text-2xl);
+  }
+  
+  .project-body :global(h3) {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    font-size: var(--text-xl);
+  }
+  
+  .project-body :global(p) {
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-secondary);
+  }
+  
+  .project-body :global(ul),
+  .project-body :global(ol) {
+    margin-bottom: var(--space-lg);
+    padding-left: var(--space-xl);
+  }
+  
+  .project-body :global(li) {
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-secondary);
+  }
+  
+  .project-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin: var(--space-xl) 0;
+  }
+  
+  .project-body :global(pre) {
+    background-color: var(--color-bg-secondary);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin: var(--space-lg) 0;
+  }
+  
+  .project-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 768px) {
+    .project-meta {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .project-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

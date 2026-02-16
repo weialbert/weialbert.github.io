@@ -1,0 +1,236 @@
+---
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../../data/resume.yaml';
+import { execSync } from 'child_process';
+
+const year = new Date().getFullYear();
+const { personal } = resumeData;
+
+// Get latest commit info
+let commitInfo = {
+  shortHash: '',
+  date: new Date(),
+  url: ''
+};
+
+try {
+  const hash = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
+  const fullHash = execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
+  const timestamp = execSync('git log -1 --pretty=%ai', { encoding: 'utf-8' }).trim();
+  
+  let remoteUrl = '';
+  try {
+    remoteUrl = execSync('git config --get remote.origin.url', { encoding: 'utf-8' }).trim();
+  } catch {
+    remoteUrl = '';
+  }
+  
+  if (remoteUrl) {
+    // Convert SSH to HTTPS URL and remove .git suffix
+    let repoUrl = remoteUrl
+      .replace('git@github.com:', 'https://github.com/')
+      .replace('git@gitlab.com:', 'https://gitlab.com/')
+      .replace('git@bitbucket.org:', 'https://bitbucket.org/')
+      .replace(/\.git$/, '');
+    
+    commitInfo = {
+      shortHash: hash,
+      date: new Date(timestamp),
+      url: `${repoUrl}/commit/${fullHash}`
+    };
+  } else {
+    commitInfo = {
+      shortHash: hash,
+      date: new Date(timestamp),
+      url: ''
+    };
+  }
+} catch (error) {
+  // Git commands may fail in production or non-git environments, that's okay
+}
+
+const lastUpdated = commitInfo.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  timeZoneName: 'short'
+});
+---
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <div class="footer-links">
+        <a href={`https://${personal.github}`} target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href={`https://${personal.linkedin}`} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <!-- <a href={`https://${personal.portfolio}`} target="_blank" rel="noopener noreferrer">Portfolio</a> -->
+      </div>
+      
+      <p class="copyright">
+        &copy; {year} {personal.name}. All rights reserved.
+      </p>
+    </div>
+    
+    {commitInfo.shortHash && (
+      <div class="version-info">
+        {commitInfo.url ? (
+          <a href={commitInfo.url} target="_blank" rel="noopener noreferrer" class="commit-link">
+            <span class="commit-hash" title={`Full hash: ${commitInfo.shortHash}`}>{commitInfo.shortHash}</span>
+            <span class="commit-separator">•</span>
+            <span class="commit-date">{lastUpdated}</span>
+          </a>
+        ) : (
+          <div class="commit-info-static">
+            <span class="commit-hash">{commitInfo.shortHash}</span>
+            <span class="commit-separator">•</span>
+            <span class="commit-date">{lastUpdated}</span>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</footer>
+
+<style>
+  /* ===== Footer-specific Layout ===== */
+  .footer {
+    background-color: var(--color-card-bg);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-xl) var(--space-lg);
+    margin-top: auto;
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    max-width: var(--content-wide);
+    margin: 0 auto;
+  }
+  
+  .footer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+  
+  /* ===== Footer Links - uses centralized link hover from global.css ===== */
+  .footer-links {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .footer-links a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    font-weight: 500;
+  }
+  
+  .footer-links a:hover {
+    color: var(--color-accent);
+  }
+  
+  /* ===== Copyright Text ===== */
+  .copyright {
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  
+  /* ===== Version/Commit Info ===== */
+  .version-info {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-md);
+    width: 100%;
+  }
+  
+  .commit-link,
+  .commit-info-static {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .commit-link {
+    cursor: pointer;
+  }
+  
+  .commit-link:hover {
+    color: var(--color-accent);
+  }
+  
+  .commit-link:hover .commit-hash {
+    color: var(--color-accent);
+  }
+  
+  .commit-hash {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--color-accent);
+    padding: var(--space-xs) var(--space-sm);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-sm);
+    user-select: all;
+  }
+  
+  .commit-separator {
+    color: var(--color-border);
+    opacity: 0.6;
+  }
+  
+  .commit-date {
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    font-size: var(--text-xs);
+  }
+  
+  .commit-info-static {
+    cursor: default;
+  }
+  
+  /* ===== Responsive Design ===== */
+  @media (max-width: 768px) {
+    .footer {
+      width: 100%;
+      margin-left: 0;
+      padding: var(--space-lg);
+    }
+    
+    .footer-content {
+      gap: var(--space-md);
+    }
+    
+    .commit-link,
+    .commit-info-static {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    
+    .commit-separator {
+      display: none;
+    }
+    
+    .commit-hash {
+      padding: var(--space-xs) var(--space-md);
+    }
+    
+    .commit-date {
+      margin-top: var(--space-xs);
+    }
+  }
+</style>

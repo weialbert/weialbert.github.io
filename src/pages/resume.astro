@@ -1,0 +1,57 @@
+---
+import MainLayout from '../components/layout/MainLayout.astro';
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../data/resume.yaml';
+
+const { personal } = resumeData as any;
+const profiles = [
+  {
+    name: "default",
+    label: "Full Resume",
+    description: "Complete work history with all details",
+  },
+  {
+    name: "onepage",
+    label: "One Page Resume",
+    description: "Condensed version highlighting key achievements",
+  },
+];
+---
+
+<MainLayout 
+  title="Resume - Albert Wei"
+  description="Download my resume"
+>
+  <article class="content-default">
+    <header class="page-header">
+      <h1>Resume</h1>
+      <p>View my work history, conveniently filtered using different profiles.</p>
+    </header>
+
+    <div class="grid-auto-fit">
+      {profiles.map(({ name, label, description }) => (
+        <article class="card">
+          <h2>{label}</h2>
+          <p class="text-secondary mb-lg">{description}</p>
+
+          <div class="download-links">
+            <a href={`/resume/${name}/resume.pdf`} target="_blank" class="btn btn-primary">
+              View PDF
+            </a> 
+            <a href={`/resume/${name}/resume.typ`} target="_blank" class="btn btn-secondary">
+              Source
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  .download-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+</style>

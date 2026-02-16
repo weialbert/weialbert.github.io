@@ -1,0 +1,46 @@
+---
+import MainLayout from '../components/layout/MainLayout.astro';
+import { getCollection } from 'astro:content';
+// @ts-ignore - YAML import works at runtime, Astro YAML plugin handles type resolution
+import resumeData from '../data/resume.yaml';
+
+const { personal } = resumeData as any;
+
+const photos = await getCollection('photos');
+const sortedPhotos = photos.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<MainLayout 
+  title="Photography - Albert Wei"
+  description="Browse my photography portfolio"
+>
+  <article>
+    <header class="page-header content-default">
+      <h1>Photography</h1>
+      <p>A collection of moments captured through my lens.</p>
+    </header>
+
+    {sortedPhotos.length > 0 ? (
+      <div class="photo-grid content-wide">
+        {sortedPhotos.map((photo) => (
+          <a href={`/photos/${photo.slug}`} class="photo-item">
+            <img src={photo.data.image} alt={photo.data.title} loading="lazy" />
+            <div class="photo-overlay">
+              <h3>{photo.data.title}</h3>
+              {photo.data.location && (
+                <p class="location">{photo.data.location}</p>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <p>No photos yet. Check back soon!</p>
+      </div>
+    )}
+  </article>
+</MainLayout>
+
+<style>
+</style>

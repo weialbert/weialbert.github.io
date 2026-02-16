@@ -1,0 +1,30 @@
+{
+  "name": "weialbert.github.io",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "npm run build:resume && astro dev",
+    "build": "npm run build:resume && astro build",
+    "build:resume": "tsx src/lib/resume/build.ts --all",
+    "preview": "astro preview",
+    "astro": "astro",
+    "clean": "rm -rf dist/ public/resume",
+    "clean:full": "rm -rf dist/ public/resume node_modules package-lock.json",
+    "reset": "npm run clean:full && npm install",
+    "update": "ncu -u && npm install",
+    "check": "ncu"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.0",
+    "@rollup/plugin-yaml": "^4.1.2",
+    "astro": "^5.17.2"
+  },
+  "devDependencies": {
+    "@myriaddreamin/typst-ts-node-compiler": "^0.7.0-rc2",
+    "@types/node": "^25.2.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
