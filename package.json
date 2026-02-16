@@ -13,7 +13,7 @@
 		"reset": "npm run clean:full && npm install",
 		"update": "ncu -u && npm install",
 		"check": "ncu",
-		"typecheck": "tsc --noEmit",
+		"typecheck": "astro sync && tsc --noEmit",
 		"lint": "biome lint .",
 		"lint:fix": "biome check --write .",
 		"lint:fix-all": "biome check --write --unsafe .",

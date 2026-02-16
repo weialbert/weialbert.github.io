@@ -9,8 +9,14 @@ permissions:
   contents: write
 
 jobs:
+  ci:
+    name: Run CI Checks
+    uses: ./.github/workflows/ci.yml
+
   release:
+    name: Create Release
     runs-on: ubuntu-latest
+    needs: ci
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,7 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: npm
       
       - name: Install dependencies
         run: npm ci
@@ -30,11 +36,17 @@ jobs:
       - name: Package release artifacts
         run: |
           mkdir -p release
-          find dist/resume -type f \( -name "*.pdf" -o -name "*.html" -o -name "*.md" \) -exec cp -v {} release/ \; 2>/dev/null || true
+          
+          # Copy resume PDFs if they exist
+          if [ -d "dist/resume" ]; then
+            find dist/resume -type f \( -name "*.pdf" -o -name "*.typ" \) -exec cp -v {} release/ \;
+          fi
+          
+          # Create site archive
           cd dist && zip -r ../release/site-${{ github.ref_name }}.zip . && cd ..
           
-          echo "Release artifacts:"
-          ls -lh release/
+          echo "### Release artifacts:" >> $GITHUB_STEP_SUMMARY
+          ls -lh release/ >> $GITHUB_STEP_SUMMARY
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -43,3 +55,11 @@ jobs:
           generate_release_notes: true
           make_latest: true
           fail_on_unmatched_files: false
+          body: |
+            ## 🚀 Release ${{ github.ref_name }}
+            
+            This release includes:
+            - 📦 Complete site archive
+            - 📄 Resume PDFs (if available)
+            
+            **Deployed to:** https://weialbert.github.io
