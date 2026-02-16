@@ -3,8 +3,7 @@ import MainLayout from '../components/layout/MainLayout.astro';
 import { getCollection } from 'astro:content';
 import resumeData from '../data/resume.yaml';
 
-const allPosts = await getCollection('blog');
-const blogPosts = allPosts.filter(post => !post.id.startsWith('archive/'));
+const blogPosts = await getCollection('blog');
 const sortedPosts = blogPosts
   .filter(post => !post.data.draft)
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());

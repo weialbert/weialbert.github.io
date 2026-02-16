@@ -20,6 +20,7 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string(),
     techStack: z.array(z.string()),
+    draft: z.boolean().optional().default(false),
     featured: z.boolean().default(false),
     githubUrl: z.string().optional(),
     liveUrl: z.string().optional(),
