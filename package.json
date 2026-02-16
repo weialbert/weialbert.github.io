@@ -1,7 +1,7 @@
 {
   "name": "weialbert.github.io",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "npm run build:resume && astro dev",
     "build": "npm run build:resume && astro build",
