@@ -24,7 +24,9 @@
 		"@astrojs/rss": "^4.0.15",
 		"@astrojs/sitemap": "^3.7.0",
 		"@rollup/plugin-yaml": "^4.1.2",
-		"astro": "^5.17.2"
+		"astro": "^5.17.2",
+		"pdf-lib": "^1.17.1",
+		"yaml": "^2.8.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.0",

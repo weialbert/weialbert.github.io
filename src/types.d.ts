@@ -1,106 +1,84 @@
 // Resume Data Types
 declare module "../data/resume.yaml" {
-  export interface PersonalInfo {
-    name: string;
-    location: string;
-    email: string;
-    phone: string;
-    linkedin: string;
-    github: string;
-    portfolio: string;
-  }
+	export interface PersonalInfo {
+		name: string;
+		location: string;
+		email: string;
+		phone: string;
+		linkedin: string;
+		github: string;
+		portfolio: string;
+	}
 
-  export interface Degree {
-    degree: string;
-    start: number;
-    end: number;
-    gpa?: string;
-    details?: string[];
-  }
+	export interface Degree {
+		degree: string;
+		start: number;
+		end: number;
+		gpa?: string;
+		details?: string[];
+	}
 
-  export interface School {
-    institution: string;
-    location: string;
-    degrees: Degree[];
-    awards?: string[];
-  }
+	export interface School {
+		institution: string;
+		location: string;
+		degrees: Degree[];
+		awards?: string[];
+	}
 
-  export interface Bullet {
-    id: string;
-    text: string;
-    importance: number;
-    tags: string[];
-  }
+	export interface Bullet {
+		id: string;
+		text: string;
+		importance: number;
+		tags: string[];
+	}
 
-  export interface Experience {
-    id: string;
-    company: string;
-    role: string;
-    location: string;
-    start: number;
-    end: string | number;
-    tags: string[];
-    bullets: Bullet[];
-  }
+	export interface Experience {
+		id: string;
+		company: string;
+		role: string;
+		location: string;
+		start: number;
+		end: string | number;
+		tags: string[];
+		bullets: Bullet[];
+	}
 
-  export interface Publication {
-    id: string;
-    title: string;
-    journal: string;
-    year: number;
-    authors: string[];
-  }
+	export interface Publication {
+		id: string;
+		title: string;
+		journal: string;
+		year: number;
+		authors: string[];
+	}
 
-  export interface Leadership {
-    id: string;
-    title: string;
-    dates: string;
-    bullets: string[];
-  }
+	export interface Leadership {
+		id: string;
+		title: string;
+		dates: string;
+		bullets: string[];
+	}
 
-  export interface Skill {
-    category: string;
-    items: string[];
-  }
+	export interface Skill {
+		category: string;
+		items: string[];
+	}
 
-  export interface ResumeData {
-    personal: PersonalInfo;
-    education: School[];
-    experiences: Experience[];
-    publications: Publication[];
-    leadership: Leadership[];
-    skills: Skill[];
-  }
+	export interface ResumeData {
+		personal: PersonalInfo;
+		education: School[];
+		experiences: Experience[];
+		publications: Publication[];
+		leadership: Leadership[];
+		skills: Skill[];
+	}
 
-  const data: ResumeData;
-  export default data;
+	const data: ResumeData;
+	export default data;
 }
 
-// Profiles Data Types
-declare module "../data/profiles.yaml" {
-  export interface ProfileConfig {
-    min_importance: number;
-    max_bullets_per_experience: number;
-    include_tags: string[] | null;
-    exclude_tags: string[] | null;
-  }
-
-  export interface ProfilesData {
-    profiles: {
-      [key: string]: ProfileConfig;
-    };
-    config: {
-      max_bullet_length: number;
-    };
-  }
-
-  const data: ProfilesData;
-  export default data;
-}
-
-
+// Other YAML files
 declare module "*.yaml" {
-	// biome-ignore lint/suspicious/noExplicitAny: catch-all for other YAML files without specific types defined
-    const data: Record<string, any>; 
-  export default data;
+	// biome-ignore lint/suspicious/noExplicitAny: catch-all
+	const data: Record<string, any>;
+	export default data;
 }

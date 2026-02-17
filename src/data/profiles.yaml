@@ -1,16 +1,17 @@
 profiles:
-  onepage:
-    min_importance: 4
-    max_bullets_per_experience: 5
-    include_tags: null
-    exclude_tags: null
-
   default:
+    one_page: false
     min_importance: 1
     max_bullets_per_experience: 10
     include_tags: null
     exclude_tags: null
 
+  default_one_page:
+    one_page: true
+    min_importance: 4
+    max_bullets_per_experience: 5
+    include_tags: null
+    exclude_tags: null
 
 config:
   max_bullet_length: 500
