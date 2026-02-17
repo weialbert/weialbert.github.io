@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy
 
 on:
   # pull_request:
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Run CI Checks
+    name: CI
     uses: ./.github/workflows/ci.yml
 
   build:
