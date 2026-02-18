@@ -78,12 +78,12 @@ async function buildResume({
 			inputs: { profile },
 		});
 
+		await fs.writeFile(pdfPath, pdfData);
+		await fs.copyFile(templatePath, typPath);
+
 		if (profileConfig.one_page) {
 			await assertSinglePagePdf(pdfData, profileConfig.label);
 		}
-
-		await fs.writeFile(pdfPath, pdfData);
-		await fs.copyFile(templatePath, typPath);
 
 		frontendProfiles.push({
 			name: profile,
