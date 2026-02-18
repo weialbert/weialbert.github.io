@@ -1,55 +1,9 @@
 ---
 import MainLayout from "../components/layout/MainLayout.astro";
-import resumeData from "../data/resume.yaml";
+import { getResumeData } from "../lib/resume/load";
 
-interface Skill {
-	category: string;
-	items: string[];
-}
+const { personal, education, experiences, skills } = getResumeData();
 
-interface Award {
-	[key: string]: any;
-}
-
-interface SchoolDegree {
-	degree: string;
-	start: number;
-	end: number;
-	gpa?: string;
-	details?: string[];
-}
-
-interface School {
-	institution: string;
-	location: string;
-	degrees: SchoolDegree[];
-	awards?: (string | Award)[];
-}
-
-interface Bullet {
-	id: string;
-	text: string;
-	importance: number;
-	tags: string[];
-}
-
-interface Experience {
-	id: string;
-	company: string;
-	role: string;
-	location: string;
-	start: number;
-	end: string | number;
-	tags: string[];
-	bullets: Bullet[];
-}
-
-const { personal, skills, education, experiences } = resumeData as {
-	personal: any;
-	skills: Skill[];
-	education: School[];
-	experiences: Experience[];
-};
 const currentRole = experiences[0];
 ---
 
@@ -58,12 +12,10 @@ const currentRole = experiences[0];
   description="Learn more about my background, skills, and interests"
 >
   <article>
-    <!-- Page Header - uses global .page-header -->
     <header class="page-header content-default">
       <h1>About Me</h1>
     </header>
 
-    <!-- Intro Section - uses global .content-default -->
     <section class="content-default mb-3xl">
       <h2 class="mb-lg">Hi, I'm {personal.name}</h2>
       <p class="text-secondary text-lg mb-md" style="line-height: 1.8;">
@@ -77,7 +29,6 @@ const currentRole = experiences[0];
       </p>
     </section>
 
-    <!-- Education Section - uses global .content-default and .education-item -->
     <section class="content-default mb-3xl">
       <h2 class="mb-xl">Education</h2>
       {education.map((school) => (
@@ -103,7 +54,6 @@ const currentRole = experiences[0];
       ))}
     </section>
 
-    <!-- Skills Section - uses global .content-full and .skill-category -->
     <section class="mb-3xl">
       <h2 class="content-default mb-2xl">Skills</h2>
       <div class="skills-grid content-full">
@@ -120,7 +70,6 @@ const currentRole = experiences[0];
       </div>
     </section>
 
-    <!-- CTA Section - uses global .cta-section -->
     <section class="cta-section content-default">
       <h2>Let's Connect</h2>
       <p>Interested in working together or just want to say hi?</p>
@@ -130,19 +79,12 @@ const currentRole = experiences[0];
 </MainLayout>
 
 <style>
-  /* ============================================================================
-     ABOUT PAGE - SPECIFIC STYLES
-     Most styles are now from global.css
-     ========================================================================= */
-  
-  /* ===== Skills Grid Layout (unique 2-column layout) ===== */
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-2xl);
   }
   
-  /* ===== Education Degree Styles (unique nested structure) ===== */
   .degree {
     margin-left: var(--space-lg);
     margin-bottom: var(--space-lg);
@@ -185,7 +127,6 @@ const currentRole = experiences[0];
     margin-right: var(--space-xs);
   }
   
-  /* ===== Responsive Design ===== */
   @media (max-width: 768px) {
     .skills-grid {
       grid-template-columns: 1fr;
