@@ -9,9 +9,26 @@ permissions:
   contents: write
 
 jobs:
+  check-tag-on-main:
+    name: Verify tag is on main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check tag is reachable from main
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor ${{ github.sha }} origin/main; then
+            echo "Error: Tag must be created on main, not a feature branch"
+            exit 1
+          fi    
+
   ci:
     name: Run CI Checks
     uses: ./.github/workflows/ci.yml
+    needs: check-tag-on-main
 
   release:
     name: Create Release
@@ -56,10 +73,10 @@ jobs:
           make_latest: true
           fail_on_unmatched_files: false
           body: |
-            ## 🚀 Release ${{ github.ref_name }}
+            ## Release ${{ github.ref_name }}
             
             This release includes:
-            - 📦 Complete site archive
-            - 📄 Resume PDFs (if available)
+            - Complete site archive
+            - Resume PDFs (if available)
             
             **Deployed to:** https://weialbert.github.io

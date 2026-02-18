@@ -22,9 +22,7 @@ const latestPosts = blogPosts
 	.slice(0, 3);
 
 const photos = await getCollection("photos");
-const featuredPhotos = photos
-	.filter((p: { data: { featured: any } }) => p.data.featured)
-	.slice(0, 6);
+const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
 ---
 
 <MainLayout title="Albert Wei - Data Engineer & Developer">

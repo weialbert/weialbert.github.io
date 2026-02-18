@@ -14,7 +14,7 @@ export const ResumeProfileSchema = z.object({
 });
 
 export const ProfilesSchema = z.object({
-	profiles: z.record(ResumeProfileSchema),
+	profiles: z.record(z.string(), ResumeProfileSchema),
 	config: z.object({
 		max_bullet_length: z.number(),
 	}),
@@ -26,4 +26,4 @@ export type ResumeProfile = ResumeProfileYaml & {
 	name: string;
 };
 
-export type ProfilesYaml = z.infer<typeof ProfilesSchema>;
+// export type ProfilesYaml = z.infer<typeof ProfilesSchema>;
