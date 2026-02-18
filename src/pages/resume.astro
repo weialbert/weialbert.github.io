@@ -1,21 +1,19 @@
 ---
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import MainLayout from "../components/layout/MainLayout.astro";
-// @ts-expect-error - YAML import works at runtime, Astro YAML plugin handles type resolution
-import resumeData from "../data/resume.yaml";
+import type { ResumeProfile } from "../lib/resume/profiles.schema";
 
-const { personal } = resumeData as any;
-const profiles = [
-	{
-		name: "default",
-		label: "Full Resume",
-		description: "Complete work history with all details",
-	},
-	{
-		name: "onepage",
-		label: "One Page Resume",
-		description: "Condensed version highlighting key achievements",
-	},
-];
+const siteRoot = typeof Astro.site === "string" ? Astro.site : ".";
+const profilesJsonPath = join(siteRoot, "public/resume/profiles.json");
+
+let profiles: ResumeProfile[] = [];
+try {
+	const raw = readFileSync(profilesJsonPath, "utf-8");
+	profiles = JSON.parse(raw) as ResumeProfile[];
+} catch (err) {
+	console.warn("Could not load resume profiles:", err);
+}
 ---
 
 <MainLayout 
@@ -29,7 +27,7 @@ const profiles = [
     </header>
 
     <div class="grid-auto-fit">
-      {profiles.map(({ name, label, description }) => (
+      {profiles.map(({ name, label, description }: ResumeProfile) => (
         <article class="card">
           <h2>{label}</h2>
           <p class="text-secondary mb-lg">{description}</p>
@@ -49,9 +47,9 @@ const profiles = [
 </MainLayout>
 
 <style>
-  .download-links {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
+.download-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
 </style>

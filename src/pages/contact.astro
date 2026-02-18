@@ -1,8 +1,8 @@
 ---
 import MainLayout from "../components/layout/MainLayout.astro";
-import resumeData from "../data/resume.yaml";
+import { getResumeData } from "../lib/resume/load";
 
-const { personal } = resumeData;
+const { personal } = getResumeData();
 ---
 
 <MainLayout 

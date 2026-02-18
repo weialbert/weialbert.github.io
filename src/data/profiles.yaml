@@ -1,5 +1,9 @@
 profiles:
   default:
+    label: "Full Resume"
+    description: "Complete work history with all details"
+    order: 1
+    hidden: false
     one_page: false
     min_importance: 1
     max_bullets_per_experience: 10
@@ -7,6 +11,10 @@ profiles:
     exclude_tags: null
 
   default_one_page:
+    label: "One Page Resume"
+    description: "Condensed version highlighting key achievements"
+    order: 2
+    hidden: false
     one_page: true
     min_importance: 4
     max_bullets_per_experience: 5

@@ -1,10 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import MainLayout from "../components/layout/MainLayout.astro";
-// @ts-expect-error - YAML import works at runtime, Astro YAML plugin handles type resolution
-import resumeData from "../data/resume.yaml";
-
-const { personal } = resumeData as any;
 
 const photos = await getCollection("photos");
 const sortedPhotos = photos.sort(

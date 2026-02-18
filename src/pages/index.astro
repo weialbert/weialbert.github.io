@@ -1,11 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 import MainLayout from "../components/layout/MainLayout.astro";
-import resumeData from "../data/resume.yaml";
+import { getResumeData } from "../lib/resume/load";
+
+const { experiences } = getResumeData();
 
 // Get resume data
-const resumeDataTyped = resumeData;
-const { experiences } = resumeDataTyped;
 const currentRole = experiences[0];
 
 // Get featured content

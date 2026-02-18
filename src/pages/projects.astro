@@ -1,9 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import MainLayout from "../components/layout/MainLayout.astro";
-import resumeData from "../data/resume.yaml";
-
-const { personal } = resumeData as any;
 
 const projects = await getCollection("projects");
 const sortedProjects = projects
