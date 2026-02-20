@@ -4,7 +4,7 @@ description: "Rebuilt my portfolio using Astro with a modern design system and i
 techStack: ["Astro", "TypeScript", "CSS", "Git"]
 featured: false
 draft: true
-order: 1
+order: 2
 githubUrl: "https://github.com/weialbert/weialbert.github.io"
 liveUrl: "https://weialbert.github.io"
 image: "https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=800&q=80"
