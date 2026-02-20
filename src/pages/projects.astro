@@ -23,16 +23,12 @@ const sortedProjects = projects
         {sortedProjects.map((project) => (
           <article class="project-card-horizontal">
             <a href={`/projects/${project.slug}`} class="project-link">
-              {project.data.image && (
-                <div class="project-image">
-                  <img src={project.data.image} alt={project.data.title} />
-                </div>
-              )}
               <div class="project-body">
                 <h2>{project.data.title}</h2>
-                <p class="text-secondary mb-lg">{project.data.description}</p>
-                
-                <div class="tag-group mb-lg">
+
+                <p class="project-description">{project.data.description}</p>
+
+                <div class="tag-group">
                   {project.data.techStack.map((tech) => (
                     <span class="tech-tag">{tech}</span>
                   ))}
@@ -51,6 +47,16 @@ const sortedProjects = projects
                   )}
                 </div>
               </div>
+
+              {project.data.image && (
+                <div class="project-image">
+                  <img 
+                    src={project.data.image} 
+                    alt={project.data.title}
+                    onerror="this.parentElement.remove()"
+                  />
+                </div>
+              )}
             </a>
           </article>
         ))}
@@ -78,17 +84,44 @@ const sortedProjects = projects
   }
 
   .project-link {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 0;
+    display: block;
     text-decoration: none;
     color: inherit;
-    height: 100%;
+  }
+
+  .project-body {
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-body h2 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .project-description {
+    display: block;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+
+  .tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .project-links {
+    display: flex;
+    gap: var(--space-md);
   }
 
   .project-image {
+    width: 100%;
+    height: 220px;
     overflow: hidden;
-    background-color: var(--color-bg-secondary);
   }
 
   .project-image img {
@@ -100,35 +133,5 @@ const sortedProjects = projects
 
   .project-card-horizontal:hover .project-image img {
     transform: scale(1.05);
-  }
-
-  .project-body {
-    padding: var(--space-xl);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .project-body h2 {
-    margin-bottom: var(--space-md);
-    font-size: var(--text-2xl);
-  }
-
-  .project-body > p {
-    flex-grow: 1;
-  }
-
-  .project-links {
-    display: flex;
-    gap: var(--space-md);
-  }
-
-  @media (max-width: 768px) {
-    .project-link {
-      grid-template-columns: 1fr;
-    }
-
-    .project-image {
-      height: 200px;
-    }
   }
 </style>
