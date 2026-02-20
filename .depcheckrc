@@ -1,0 +1,7 @@
+ignores:
+  - "@astrojs/*"
+  - "astro-*"
+  - "astro"
+
+ignore-patterns:
+  - "src/content/config.ts"
