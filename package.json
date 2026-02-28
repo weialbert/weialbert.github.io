@@ -24,17 +24,17 @@
 		"@astrojs/rss": "^4.0.15",
 		"@astrojs/sitemap": "^3.7.0",
 		"@rollup/plugin-yaml": "^4.1.2",
-		"astro": "^5.17.3",
+		"astro": "^5.18.0",
 		"pdf-lib": "^1.17.1",
 		"remark-github-alerts": "^0.1.1",
 		"yaml": "^2.8.2",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.4.3",
+		"@biomejs/biome": "2.4.4",
 		"@myriaddreamin/typst-ts-node-compiler": "^0.7.0-rc2",
-		"@types/node": "^25.3.0",
-		"npm-check-updates": "^19.4.1",
+		"@types/node": "^25.3.2",
+		"npm-check-updates": "^19.6.3",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	}
