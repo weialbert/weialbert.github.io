@@ -22,7 +22,7 @@ const sortedProjects = projects
       <div class="grid-1 content-wide">
         {sortedProjects.map((project) => (
           <article class="project-card-horizontal">
-            <a href={`/projects/${project.slug}`} class="project-link">
+            <a href={`/projects/${project.id}`} class="project-link">
               <div class="project-body">
                 <h2>{project.data.title}</h2>
 
