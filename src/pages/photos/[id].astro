@@ -1,20 +1,20 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import MainLayout from "../../components/layout/MainLayout.astro";
 
 export async function getStaticPaths() {
 	const photos = await getCollection("photos");
 	return photos.map((photo) => ({
-		params: { slug: photo.slug },
+		params: { id: photo.id },
 		props: { photo },
 	}));
 }
 
 const { photo } = Astro.props;
-const { Content } = await photo.render();
+const { Content } = await render(photo);
 
 const allPhotos = await getCollection("photos");
-const currentIndex = allPhotos.findIndex((p) => p.slug === photo.slug);
+const currentIndex = allPhotos.findIndex((p) => p.id === photo.id);
 const prevPhoto = currentIndex > 0 ? allPhotos[currentIndex - 1] : null;
 const nextPhoto =
 	currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] : null;
@@ -67,12 +67,12 @@ const nextPhoto =
     
     <nav class="photo-navigation">
       {prevPhoto && (
-        <a href={`/photos/${prevPhoto.slug}`} class="nav-btn prev">
+        <a href={`/photos/${prevPhoto.id}`} class="nav-btn prev">
           ← Previous
         </a>
       )}
       {nextPhoto && (
-        <a href={`/photos/${nextPhoto.slug}`} class="nav-btn next">
+        <a href={`/photos/${nextPhoto.id}`} class="nav-btn next">
           Next →
         </a>
       )}

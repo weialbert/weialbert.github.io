@@ -63,7 +63,7 @@ const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
       <div class="grid-auto-fit">
         {featuredProjects.map((project) => (
           <article class="project-card">
-            <a href={`/projects/${project.slug}`}>
+            <a href={`/projects/${project.id}`}>
               {project.data.image && (
                 <img src={project.data.image} alt={project.data.title} />
               )}
@@ -92,9 +92,9 @@ const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
       </div>
       
       <div class="grid-auto-fit">
-        {latestPosts.map((post: { slug: any; data: { publishDate: { toISOString: () => string | null | undefined; toLocaleDateString: (arg0: string, arg1: { year: string; month: string; day: string; }) => unknown; }; title: unknown; description: unknown; tags: any[]; }; }) => (
+        {latestPosts.map((post: { id: any; data: { publishDate: { toISOString: () => string | null | undefined; toLocaleDateString: (arg0: string, arg1: { year: string; month: string; day: string; }) => unknown; }; title: unknown; description: unknown; tags: any[]; }; }) => (
           <article class="blog-card">
-            <a href={`/blog/${post.slug}`}>
+            <a href={`/blog/${post.id}`}>
               <time datetime={post.data.publishDate.toISOString()}>
                 {post.data.publishDate.toLocaleDateString('en-US', { 
                   year: 'numeric', 
@@ -125,8 +125,8 @@ const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
       </div>
       
       <div class="photo-grid">
-        {featuredPhotos.map((photo: { slug: any; data: { image: string | null | undefined; title: unknown; }; }) => (
-          <a href={`/photos/${photo.slug}`} class="photo-item">
+        {featuredPhotos.map((photo: { id: any; data: { image: string | null | undefined; title: unknown; }; }) => (
+          <a href={`/photos/${photo.id}`} class="photo-item">
             <img src={photo.data.image} alt={String(photo.data.title)} loading="lazy" />
             <div class="photo-overlay">
               <span class="photo-title">{photo.data.title}</span>

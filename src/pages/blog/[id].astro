@@ -1,29 +1,20 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import MainLayout from "../../components/layout/MainLayout.astro";
 
 export async function getStaticPaths() {
-	const posts = await getCollection("blog");
-	return posts
-		.filter((post) => !post.data.draft)
-		.map((post) => ({
-			params: { slug: post.slug },
-			props: { post },
-		}));
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
 }
 
 const { post } = Astro.props;
-const { Content, headings } = await post.render();
-
-// Calculate reading time
-function getReadingTime(content: string) {
-	const wordsPerMinute = 200;
-	const words = content.split(/\s+/).length;
-	return Math.ceil(words / wordsPerMinute);
-}
+const { Content, headings } = await render(post);
 ---
 
-<MainLayout 
+<MainLayout
   title={`${post.data.title} - Blog`}
   description={post.data.description}
   image={post.data.image}
@@ -31,47 +22,55 @@ function getReadingTime(content: string) {
 >
   <article class="blog-post">
     <a href="/blog" class="back-link">← Back to Blog</a>
-    
+
     <header class="post-header">
       <h1>{post.data.title}</h1>
-      
+
       <div class="post-meta">
         <time datetime={post.data.publishDate.toISOString()}>
-          {post.data.publishDate.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })}
+          {
+            post.data.publishDate.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
         </time>
-        <span class="separator">•</span>
-        <span class="reading-time">{getReadingTime(post.body)} min read</span>
       </div>
-      
+
       <div class="post-tags">
-        {post.data.tags.map((tag) => (
-          <a href={`/blog/tags/${tag}`} class="tag">{tag}</a>
-        ))}
+        {
+          post.data.tags.map((tag) => (
+            <a href={`/blog/tags/${tag}`} class="tag">
+              {tag}
+            </a>
+          ))
+        }
       </div>
     </header>
 
-    {post.data.image && (
-      <div class="post-hero-image">
-        <img src={post.data.image} alt={post.data.title} />
-      </div>
-    )}
+    {
+      post.data.image && (
+        <div class="post-hero-image">
+          <img src={post.data.image} alt={post.data.title} />
+        </div>
+      )
+    }
 
-    {headings.length > 0 && (
-      <aside class="toc">
-        <h2>Table of Contents</h2>
-        <ul>
-          {headings.map((heading) => (
-            <li class={`toc-${heading.depth}`}>
-              <a href={`#${heading.slug}`}>{heading.text}</a>
-            </li>
-          ))}
-        </ul>
-      </aside>
-    )}
+    {
+      headings.length > 0 && (
+        <aside class="toc">
+          <h2>Table of Contents</h2>
+          <ul>
+            {headings.map((heading) => (
+              <li class={`toc-${heading.depth}`}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )
+    }
 
     <div class="post-content">
       <Content />
@@ -81,26 +80,33 @@ function getReadingTime(content: string) {
       <div class="share-section">
         <h3>Share this post</h3>
         <div class="share-buttons">
-          <a href={`https://twitter.com/intent/tweet?text=${post.data.title}&url=${Astro.url}`} target="_blank" rel="noopener noreferrer">
+          <a
+            href={`https://twitter.com/intent/tweet?text=${post.data.title}&url=${Astro.url}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Twitter
           </a>
-          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${Astro.url}`} target="_blank" rel="noopener noreferrer">
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${Astro.url}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             LinkedIn
           </a>
         </div>
       </div>
-      
+
       <a href="/blog" class="back-to-blog">← Back to all posts</a>
     </footer>
   </article>
 </MainLayout>
-
 <style>
   .blog-post {
     max-width: 800px;
     margin: 0 auto;
   }
-  
+
   .back-link {
     display: inline-block;
     color: var(--color-text-secondary);
@@ -108,38 +114,38 @@ function getReadingTime(content: string) {
     margin-bottom: var(--space-xl);
     transition: color var(--transition-fast);
   }
-  
+
   .back-link:hover {
     color: var(--color-accent);
   }
-  
+
   .post-header {
     margin-bottom: var(--space-2xl);
   }
-  
+
   .post-header h1 {
     font-size: var(--text-4xl);
     line-height: 1.2;
     margin-bottom: var(--space-lg);
   }
-  
+
   .post-meta {
     display: flex;
     gap: var(--space-md);
     color: var(--color-text-secondary);
     margin-bottom: var(--space-lg);
   }
-  
+
   .separator {
     color: var(--color-border);
   }
-  
+
   .post-tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-sm);
   }
-  
+
   .tag {
     background-color: var(--color-bg-secondary);
     padding: var(--space-xs) var(--space-md);
@@ -149,100 +155,100 @@ function getReadingTime(content: string) {
     text-decoration: none;
     transition: all var(--transition-fast);
   }
-  
+
   .tag:hover {
     background-color: var(--color-accent);
     color: white;
   }
-  
+
   .post-hero-image {
     margin-bottom: var(--space-2xl);
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
-  
+
   .post-hero-image img {
     width: 100%;
     height: auto;
   }
-  
+
   .toc {
     background-color: var(--color-bg-secondary);
     padding: var(--space-xl);
     border-radius: var(--radius-lg);
     margin-bottom: var(--space-2xl);
   }
-  
+
   .toc h2 {
     font-size: var(--text-lg);
     margin-bottom: var(--space-md);
   }
-  
+
   .toc ul {
     list-style: none;
   }
-  
+
   .toc li {
     margin-bottom: var(--space-sm);
   }
-  
+
   .toc a {
     color: var(--color-text-secondary);
     text-decoration: none;
     transition: color var(--transition-fast);
   }
-  
+
   .toc a:hover {
     color: var(--color-accent);
   }
-  
+
   .toc-3 {
     padding-left: var(--space-lg);
   }
-  
+
   .toc-4 {
     padding-left: calc(var(--space-lg) * 2);
   }
-  
+
   .post-content {
     line-height: 1.8;
   }
-  
+
   .post-content :global(h2) {
     margin-top: var(--space-2xl);
     margin-bottom: var(--space-lg);
     font-size: var(--text-2xl);
   }
-  
+
   .post-content :global(h3) {
     margin-top: var(--space-xl);
     margin-bottom: var(--space-md);
     font-size: var(--text-xl);
   }
-  
+
   .post-content :global(p) {
     margin-bottom: var(--space-lg);
     color: var(--color-text-secondary);
   }
-  
+
   .post-content :global(ul),
   .post-content :global(ol) {
     margin-bottom: var(--space-lg);
     padding-left: var(--space-xl);
   }
-  
+
   .post-content :global(li) {
     margin-bottom: var(--space-sm);
     color: var(--color-text-secondary);
   }
-  
+
   .post-content :global(blockquote) {
     border-left: 4px solid var(--color-accent);
     padding-left: var(--space-lg);
     margin: var(--space-lg) 0;
     color: var(--color-text-secondary);
   }
-  
+
   .post-content :global(code) {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
@@ -250,7 +256,7 @@ function getReadingTime(content: string) {
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-sm);
   }
-  
+
   .post-content :global(pre) {
     background-color: var(--color-bg-secondary);
     padding: var(--space-lg);
@@ -258,51 +264,51 @@ function getReadingTime(content: string) {
     overflow-x: auto;
     margin: var(--space-lg) 0;
   }
-  
+
   .post-content :global(pre code) {
     background-color: transparent;
     padding: 0;
     border-radius: 0;
   }
-  
+
   .post-content :global(img) {
     max-width: 100%;
     height: auto;
     border-radius: var(--radius-md);
     margin: var(--space-xl) 0;
   }
-  
+
   .post-content :global(a) {
     color: var(--color-accent);
     text-decoration: none;
     transition: color var(--transition-fast);
   }
-  
+
   .post-content :global(a:hover) {
     color: var(--color-accent-hover);
     text-decoration: underline;
   }
-  
+
   .post-footer {
     margin-top: var(--space-3xl);
     padding-top: var(--space-2xl);
     border-top: 1px solid var(--color-border);
   }
-  
+
   .share-section {
     margin-bottom: var(--space-2xl);
   }
-  
+
   .share-section h3 {
     margin-bottom: var(--space-md);
   }
-  
+
   .share-buttons {
     display: flex;
     gap: var(--space-md);
     flex-wrap: wrap;
   }
-  
+
   .share-buttons a {
     padding: var(--space-md) var(--space-lg);
     background-color: var(--color-bg-secondary);
@@ -312,19 +318,19 @@ function getReadingTime(content: string) {
     color: var(--color-text);
     transition: all var(--transition-fast);
   }
-  
+
   .share-buttons a:hover {
     background-color: var(--color-accent);
     color: white;
     border-color: var(--color-accent);
   }
-  
+
   .back-to-blog {
     color: var(--color-text-secondary);
     text-decoration: none;
     transition: color var(--transition-fast);
   }
-  
+
   .back-to-blog:hover {
     color: var(--color-accent);
   }

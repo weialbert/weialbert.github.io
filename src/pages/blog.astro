@@ -22,7 +22,7 @@ const sortedPosts = blogPosts
       <div class="grid-1">
         {sortedPosts.map((post) => (
           <article class="blog-card">
-            <a href={`/blog/${post.slug}`} class="blog-link">
+            <a href={`/blog/${post.id}`} class="blog-link">
               <time datetime={post.data.publishDate.toISOString()}>
                 {post.data.publishDate.toLocaleDateString('en-US', {
                   year: 'numeric',
