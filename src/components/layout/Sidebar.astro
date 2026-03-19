@@ -153,6 +153,8 @@ const isActivePath = (href: string) =>
       background-color var(--transition-fast);
     position: relative;
     white-space: nowrap;
+    isolation: isolate;
+    z-index: 0;
   }
 
   .nav-link:hover {
@@ -166,6 +168,7 @@ const isActivePath = (href: string) =>
   }
 
   .nav-bubble {
+    display: block;
     position: absolute;
     inset: 0.35rem 0.6rem;
     border-radius: 999px;

@@ -1,9 +1,11 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
+import DetailPage from "../../components/content/DetailPage.astro";
 import MainLayout from "../../components/layout/MainLayout.astro";
+import { getPublishedProjects } from "../../lib/content/projects";
 
 export async function getStaticPaths() {
-	const projects = await getCollection("projects");
+	const projects = await getPublishedProjects();
 	return projects.map((project) => ({
 		params: { id: project.id },
 		props: { project },
@@ -19,36 +21,36 @@ const { Content } = await render(project);
   description={project.data.description}
   image={project.data.image}
 >
-  <article class="project-detail">
-    <header class="project-header">
-      <a href="/projects" class="back-link">← Back to Projects</a>
-      
-      <h1>{project.data.title}</h1>
-      
-      <div class="project-meta">
-        <div class="tech-stack">
-          {project.data.techStack.map((tech) => (
-            <span class="tech-tag">{tech}</span>
-          ))}
-        </div>
-        
-        <div class="project-actions">
-          {project.data.githubUrl && (
-            <a href={project.data.githubUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-              View on GitHub
-            </a>
-          )}
-          {project.data.liveUrl && (
-            <a href={project.data.liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-              Live Demo
-            </a>
-          )}
+  <DetailPage backHref="/projects" backLabel="Back to Projects" maxWidth="900px">
+    <Fragment slot="header">
+      <div class="project-header">
+        <h1>{project.data.title}</h1>
+
+        <div class="project-meta">
+          <div class="tech-stack">
+            {project.data.techStack.map((tech) => (
+              <span class="tech-tag">{tech}</span>
+            ))}
+          </div>
+
+          <div class="project-actions">
+            {project.data.githubUrl && (
+              <a href={project.data.githubUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                View on GitHub
+              </a>
+            )}
+            {project.data.liveUrl && (
+              <a href={project.data.liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                Live Demo
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </header>
+    </Fragment>
 
     {project.data.image && (
-      <div class="project-hero-image">
+      <div slot="hero">
         <img
           src={project.data.image}
           alt={project.data.title}
@@ -62,27 +64,10 @@ const { Content } = await render(project);
     <div class="project-body">
       <Content />
     </div>
-  </article>
+  </DetailPage>
 </MainLayout>
 
 <style>
-  .project-detail {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  
-  .back-link {
-    display: inline-block;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    margin-bottom: var(--space-lg);
-    transition: color var(--transition-fast);
-  }
-  
-  .back-link:hover {
-    color: var(--color-accent);
-  }
-  
   .project-header h1 {
     font-size: var(--text-4xl);
     margin-bottom: var(--space-lg);
@@ -146,73 +131,6 @@ const { Content } = await render(project);
   .btn-secondary:hover {
     background-color: var(--color-accent);
     color: white;
-  }
-  
-  .project-hero-image {
-    aspect-ratio: 16 / 9;
-    margin-bottom: var(--space-2xl);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background-color: var(--color-bg-secondary);
-  }
-  
-  .project-hero-image img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-  }
-  
-  .project-body {
-    line-height: 1.8;
-  }
-  
-  .project-body :global(h2) {
-    margin-top: var(--space-2xl);
-    margin-bottom: var(--space-lg);
-    font-size: var(--text-2xl);
-  }
-  
-  .project-body :global(h3) {
-    margin-top: var(--space-xl);
-    margin-bottom: var(--space-md);
-    font-size: var(--text-xl);
-  }
-  
-  .project-body :global(p) {
-    margin-bottom: var(--space-lg);
-    color: var(--color-text-secondary);
-  }
-  
-  .project-body :global(ul),
-  .project-body :global(ol) {
-    margin-bottom: var(--space-lg);
-    padding-left: var(--space-xl);
-  }
-  
-  .project-body :global(li) {
-    margin-bottom: var(--space-sm);
-    color: var(--color-text-secondary);
-  }
-  
-  .project-body :global(img) {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius-md);
-    margin: var(--space-xl) 0;
-  }
-  
-  .project-body :global(pre) {
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    margin: var(--space-lg) 0;
-  }
-  
-  .project-body :global(code) {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
   }
 
   @media (max-width: 768px) {

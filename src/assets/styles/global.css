@@ -357,11 +357,24 @@ code {
 ::view-transition-new(page-content) {
 	animation-duration: 200ms;
 	animation-timing-function: var(--ease-smooth);
+	animation-fill-mode: both;
+	backface-visibility: hidden;
+	contain: paint;
+	mix-blend-mode: normal;
 }
 
 ::view-transition-group(page-content) {
 	animation-duration: 240ms;
 	animation-timing-function: var(--ease-smooth);
+	animation-fill-mode: both;
+}
+
+::view-transition-old(page-content) {
+	z-index: 2;
+}
+
+::view-transition-new(page-content) {
+	z-index: 1;
 }
 
 ::view-transition-old(desktop-nav-bubble),
@@ -378,48 +391,48 @@ code {
 @keyframes page-content-in {
 	from {
 		opacity: 0;
-		transform: translateY(10px);
+		transform: translate3d(0, 10px, 0);
 	}
 
 	to {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translate3d(0, 0, 0);
 	}
 }
 
 @keyframes page-content-out {
 	from {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translate3d(0, 0, 0);
 	}
 
 	to {
 		opacity: 0;
-		transform: translateY(-6px);
+		transform: translate3d(0, -6px, 0);
 	}
 }
 
 @keyframes page-content-back-in {
 	from {
 		opacity: 0;
-		transform: translateY(8px);
+		transform: translate3d(0, 8px, 0);
 	}
 
 	to {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translate3d(0, 0, 0);
 	}
 }
 
 @keyframes page-content-back-out {
 	from {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translate3d(0, 0, 0);
 	}
 
 	to {
 		opacity: 0;
-		transform: translateY(-8px);
+		transform: translate3d(0, -8px, 0);
 	}
 }
 
@@ -439,48 +452,48 @@ code {
 	@keyframes page-content-in {
 		from {
 			opacity: 0;
-			transform: translateY(6px);
+			transform: translate3d(0, 6px, 0);
 		}
 
 		to {
 			opacity: 1;
-			transform: translateY(0);
+			transform: translate3d(0, 0, 0);
 		}
 	}
 
 	@keyframes page-content-out {
 		from {
 			opacity: 1;
-			transform: translateY(0);
+			transform: translate3d(0, 0, 0);
 		}
 
 		to {
 			opacity: 0;
-			transform: translateY(-2px);
+			transform: translate3d(0, -2px, 0);
 		}
 	}
 
 	@keyframes page-content-back-in {
 		from {
 			opacity: 0;
-			transform: translateY(4px);
+			transform: translate3d(0, 4px, 0);
 		}
 
 		to {
 			opacity: 1;
-			transform: translateY(0);
+			transform: translate3d(0, 0, 0);
 		}
 	}
 
 	@keyframes page-content-back-out {
 		from {
 			opacity: 1;
-			transform: translateY(0);
+			transform: translate3d(0, 0, 0);
 		}
 
 		to {
 			opacity: 0;
-			transform: translateY(-2px);
+			transform: translate3d(0, -2px, 0);
 		}
 	}
 }

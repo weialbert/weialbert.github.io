@@ -21,7 +21,7 @@ const sortedPhotos = photos.sort(
     {sortedPhotos.length > 0 ? (
       <div class="photo-grid content-wide">
         {sortedPhotos.map((photo) => (
-          <a href={`/photos/${photo.slug}`} class="photo-item">
+          <a href={`/photos/${photo.id}`} class="photo-item">
             <img
               src={photo.data.image}
               alt={photo.data.title}

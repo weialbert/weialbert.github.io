@@ -1,7 +1,8 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../components/layout/MainLayout.astro";
+import { getLatestBlogPosts } from "../lib/content/blog";
 import { getPhotosCollection } from "../lib/content/photos";
+import { getFeaturedProjects } from "../lib/content/projects";
 import { getResumeData } from "../lib/resume/load";
 
 const { experiences } = getResumeData();
@@ -10,18 +11,8 @@ const { experiences } = getResumeData();
 const currentRole = experiences[0];
 
 // Get featured content
-const projects = await getCollection("projects");
-const featuredProjects = projects
-	.filter((p) => p.data.featured)
-	.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-	.slice(0, 3);
-
-const blogPosts = await getCollection("blog");
-const latestPosts = blogPosts
-	.filter((p) => !p.data.draft)
-	.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
-	.slice(0, 3);
-
+const featuredProjects = await getFeaturedProjects();
+const latestPosts = await getLatestBlogPosts();
 const photos = await getPhotosCollection();
 const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
 ---
@@ -100,11 +91,11 @@ const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
       </div>
       
       <div class="grid-auto-fit">
-        {latestPosts.map((post: { id: any; data: { publishDate: { toISOString: () => string | null | undefined; toLocaleDateString: (arg0: string, arg1: { year: string; month: string; day: string; }) => unknown; }; title: unknown; description: unknown; tags: any[]; }; }) => (
+        {latestPosts.map((post) => (
           <article class="blog-card">
             <a href={`/blog/${post.id}`}>
               <time datetime={post.data.publishDate.toISOString()}>
-                {post.data.publishDate.toLocaleDateString('en-US', { 
+                {post.data.publishDate.toLocaleDateString('en-US', {
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
@@ -113,7 +104,7 @@ const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
               <h3>{post.data.title}</h3>
               <p>{post.data.description}</p>
               <div class="tag-group mt-md">
-                {post.data.tags.slice(0, 3).map((tag: unknown) => (
+                {post.data.tags.slice(0, 3).map((tag) => (
                   <span class="tag">{tag}</span>
                 ))}
               </div>
@@ -133,7 +124,7 @@ const featuredPhotos = photos.filter((p) => p.data.featured).slice(0, 6);
       </div>
       
       <div class="photo-grid">
-        {featuredPhotos.map((photo: { id: any; data: { image: string | null | undefined; title: unknown; }; }) => (
+        {featuredPhotos.map((photo) => (
           <a href={`/photos/${photo.id}`} class="photo-item">
             <img
               src={photo.data.image}
