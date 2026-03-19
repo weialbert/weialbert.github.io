@@ -1,9 +1,10 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import MainLayout from "../../components/layout/MainLayout.astro";
+import { getPhotosCollection } from "../../lib/content/photos";
 
 export async function getStaticPaths() {
-	const photos = await getCollection("photos");
+	const photos = await getPhotosCollection();
 	return photos.map((photo) => ({
 		params: { id: photo.id },
 		props: { photo },
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
 const { photo } = Astro.props;
 const { Content } = await render(photo);
 
-const allPhotos = await getCollection("photos");
+const allPhotos = await getPhotosCollection();
 const currentIndex = allPhotos.findIndex((p) => p.id === photo.id);
 const prevPhoto = currentIndex > 0 ? allPhotos[currentIndex - 1] : null;
 const nextPhoto =
@@ -29,7 +30,13 @@ const nextPhoto =
     <a href="/photos" class="back-link">← Back to Gallery</a>
     
     <div class="photo-container">
-      <img src={photo.data.image} alt={photo.data.title} />
+      <img
+        src={photo.data.image}
+        alt={photo.data.title}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
     </div>
     
     <div class="photo-info">
@@ -179,7 +186,10 @@ const nextPhoto =
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--color-text);
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
   }
   
   .nav-btn:hover {

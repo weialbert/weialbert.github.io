@@ -13,13 +13,37 @@ interface Props {
 ---
 
 <BaseLayout {...Astro.props}>
-  <div class="app-container">
+  <div class="app-container" transition:animate="none">
     <Sidebar />
     
-    <div class="main-wrapper">
+    <div class="main-wrapper" transition:animate="none">
       <Header />
       
-      <main id="main-content" class="main-content">
+      <main
+        id="main-content"
+        class="main-content"
+        transition:name="page-content"
+        transition:animate={{
+          forwards: {
+            old: { name: "page-content-out", duration: "120ms", easing: "ease-in" },
+            new: {
+              name: "page-content-in",
+              duration: "220ms",
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              delay: "20ms",
+            },
+          },
+          backwards: {
+            old: { name: "page-content-back-out", duration: "100ms", easing: "ease-in" },
+            new: {
+              name: "page-content-back-in",
+              duration: "180ms",
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              delay: "10ms",
+            },
+          },
+        }}
+      >
         <slot />
       </main>
     </div>
@@ -28,6 +52,65 @@ interface Props {
   </div>
   
 </BaseLayout>
+
+<script>
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  const mobileToggle = document.querySelector("[data-mobile-menu-toggle]");
+  const mobileClose = document.querySelector("[data-mobile-menu-close]");
+  const mobileMediaQuery = window.matchMedia("(max-width: 768px)");
+
+  function setMobileMenuState(isOpen) {
+    if (!sidebar || !overlay) return;
+
+    sidebar.classList.toggle("mobile-open", isOpen);
+    overlay.classList.toggle("active", isOpen);
+    document.body.classList.toggle("menu-open", isOpen);
+    mobileToggle?.setAttribute("aria-expanded", String(isOpen));
+    sidebar.setAttribute("aria-hidden", String(!isOpen && mobileMediaQuery.matches));
+  }
+
+  function closeMobileMenu() {
+    setMobileMenuState(false);
+  }
+
+  function toggleMobileMenu() {
+    if (!sidebar) return;
+    const isOpen = !sidebar.classList.contains("mobile-open");
+    setMobileMenuState(isOpen);
+  }
+
+  mobileToggle?.addEventListener("click", toggleMobileMenu);
+  overlay?.addEventListener("click", closeMobileMenu);
+  mobileClose?.addEventListener("click", closeMobileMenu);
+
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", closeMobileMenu);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMobileMenu();
+    }
+  });
+
+  mobileMediaQuery.addEventListener("change", (event) => {
+    if (!event.matches) {
+      setMobileMenuState(false);
+      sidebar?.removeAttribute("aria-hidden");
+    } else {
+      sidebar?.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  document.addEventListener("astro:before-preparation", closeMobileMenu);
+  document.addEventListener("astro:page-load", () => {
+    document.body.classList.remove("menu-open");
+    if (mobileMediaQuery.matches) {
+      sidebar?.setAttribute("aria-hidden", "true");
+    }
+  });
+</script>
 
 <style>
   .app-container {
@@ -52,6 +135,10 @@ interface Props {
   }
   
   @media (max-width: 768px) {
+    :global(body.menu-open) {
+      overflow: hidden;
+    }
+
     .main-wrapper {
       margin-left: 0;
     }

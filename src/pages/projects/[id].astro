@@ -49,7 +49,13 @@ const { Content } = await render(project);
 
     {project.data.image && (
       <div class="project-hero-image">
-        <img src={project.data.image} alt={project.data.title} />
+        <img
+          src={project.data.image}
+          alt={project.data.title}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
       </div>
     )}
 
@@ -115,7 +121,10 @@ const { Content } = await render(project);
     border-radius: var(--radius-md);
     text-decoration: none;
     font-weight: 500;
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
     display: inline-block;
   }
 
@@ -140,14 +149,18 @@ const { Content } = await render(project);
   }
   
   .project-hero-image {
+    aspect-ratio: 16 / 9;
     margin-bottom: var(--space-2xl);
     border-radius: var(--radius-lg);
     overflow: hidden;
+    background-color: var(--color-bg-secondary);
   }
   
   .project-hero-image img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    display: block;
+    object-fit: cover;
   }
   
   .project-body {

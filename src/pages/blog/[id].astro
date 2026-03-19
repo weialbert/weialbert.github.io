@@ -3,11 +3,11 @@ import { getCollection, render } from "astro:content";
 import MainLayout from "../../components/layout/MainLayout.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { id: post.id },
-    props: { post },
-  }));
+	const posts = await getCollection("blog");
+	return posts.map((post) => ({
+		params: { id: post.id },
+		props: { post },
+	}));
 }
 
 const { post } = Astro.props;
@@ -52,7 +52,13 @@ const { Content, headings } = await render(post);
     {
       post.data.image && (
         <div class="post-hero-image">
-          <img src={post.data.image} alt={post.data.title} />
+          <img
+            src={post.data.image}
+            alt={post.data.title}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
         </div>
       )
     }
@@ -153,7 +159,9 @@ const { Content, headings } = await render(post);
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
     text-decoration: none;
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
   }
 
   .tag:hover {
@@ -162,14 +170,18 @@ const { Content, headings } = await render(post);
   }
 
   .post-hero-image {
+    aspect-ratio: 16 / 9;
     margin-bottom: var(--space-2xl);
     border-radius: var(--radius-lg);
     overflow: hidden;
+    background-color: var(--color-bg-secondary);
   }
 
   .post-hero-image img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    display: block;
+    object-fit: cover;
   }
 
   .toc {
@@ -316,7 +328,10 @@ const { Content, headings } = await render(post);
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--color-text);
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
   }
 
   .share-buttons a:hover {

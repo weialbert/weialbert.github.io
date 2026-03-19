@@ -36,7 +36,13 @@ const sortedPosts = blogPosts
               <p class="text-secondary mb-lg">{post.data.description}</p>
 
               {post.data.image && (
-                <img src={post.data.image} alt={post.data.title} class="blog-image" />
+                <img
+                  src={post.data.image}
+                  alt={post.data.title}
+                  class="blog-image"
+                  loading="lazy"
+                  decoding="async"
+                />
               )}
 
               <div class="tag-group mb-md">
