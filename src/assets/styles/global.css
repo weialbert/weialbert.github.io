@@ -377,17 +377,6 @@ code {
 	z-index: 1;
 }
 
-::view-transition-old(desktop-nav-bubble),
-::view-transition-new(desktop-nav-bubble) {
-	animation-duration: 320ms;
-	animation-timing-function: var(--ease-smooth);
-}
-
-::view-transition-group(desktop-nav-bubble) {
-	animation-duration: 320ms;
-	animation-timing-function: var(--ease-smooth);
-}
-
 @keyframes page-content-in {
 	from {
 		opacity: 0;
@@ -441,12 +430,6 @@ code {
 	::view-transition-new(page-content),
 	::view-transition-group(page-content) {
 		animation-duration: 140ms;
-	}
-
-	::view-transition-group(desktop-nav-bubble),
-	::view-transition-old(desktop-nav-bubble),
-	::view-transition-new(desktop-nav-bubble) {
-		animation-duration: 0ms;
 	}
 
 	@keyframes page-content-in {
