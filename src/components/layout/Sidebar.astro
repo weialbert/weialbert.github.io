@@ -1,6 +1,33 @@
 ---
 import ThemeToggle from "../ThemeToggle.astro";
 
+const navBubbleTransition = {
+	forwards: {
+		old: {
+			name: "nav-bubble-out",
+			duration: "240ms",
+			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+		},
+		new: {
+			name: "nav-bubble-in",
+			duration: "240ms",
+			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+		},
+	},
+	backwards: {
+		old: {
+			name: "nav-bubble-out",
+			duration: "240ms",
+			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+		},
+		new: {
+			name: "nav-bubble-in",
+			duration: "240ms",
+			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+		},
+	},
+};
+
 const navItems = [
 	{ href: "/", label: "Home", icon: "home" },
 	{ href: "/about", label: "About", icon: "user" },
@@ -12,32 +39,52 @@ const navItems = [
 ];
 
 const currentPath = Astro.url.pathname;
+const isActivePath = (href: string) =>
+	currentPath === href || (href !== "/" && currentPath.startsWith(href));
 ---
 
-<aside id="sidebar" class="sidebar">
+<aside id="sidebar" class="sidebar" transition:animate="none">
   <div class="sidebar-header">
     <a href="/" class="logo">
       <span class="logo-text">Albert Wei</span>
     </a>
+
+    <button
+      type="button"
+      class="mobile-close"
+      data-mobile-menu-close
+      aria-label="Close menu"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
   </div>
 
   <nav class="sidebar-nav">
     <ul>
       {
         navItems.map((item) => (
-          <li>
+          <li class="nav-item">
             <a
               href={item.href}
               class:list={[
                 "nav-link",
                 {
-                  active:
-                    currentPath === item.href ||
-                    (item.href !== "/" && currentPath.startsWith(item.href)),
+                  active: isActivePath(item.href),
                 },
               ]}
-              aria-current={currentPath === item.href ? "page" : undefined}
+              aria-current={isActivePath(item.href) ? "page" : undefined}
             >
+              {isActivePath(item.href) && (
+                <span
+                  class="nav-bubble"
+                  transition:name="desktop-nav-bubble"
+                  transition:animate={navBubbleTransition}
+                  aria-hidden="true"
+                />
+              )}
               <span class="nav-icon" data-icon={item.icon} />
               <span class="nav-label">{item.label}</span>
             </a>
@@ -52,60 +99,13 @@ const currentPath = Astro.url.pathname;
   </div>
 </aside>
 
-<!-- Mobile Menu Toggle -->
-<button
-  id="mobile-menu-toggle"
-  class="mobile-menu-toggle"
-  aria-label="Toggle mobile menu"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-  >
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-  </svg>
-</button>
-
 <!-- Mobile Overlay -->
-<div id="sidebar-overlay" class="sidebar-overlay"></div>
-
-<script>
-  // Mobile drawer functionality only
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("sidebar-overlay");
-  const mobileToggle = document.getElementById("mobile-menu-toggle");
-
-  function toggleMobileMenu() {
-    if (!sidebar) return;
-    sidebar.classList.toggle("mobile-open");
-    overlay?.classList.toggle("active");
-    document.body.style.overflow = sidebar?.classList.contains("mobile-open")
-      ? "hidden"
-      : "";
-  }
-
-  function closeMobileMenu() {
-    if (!sidebar) return;
-    sidebar.classList.remove("mobile-open");
-    overlay?.classList.remove("active");
-    document.body.style.overflow = "";
-  }
-
-  mobileToggle?.addEventListener("click", toggleMobileMenu);
-  overlay?.addEventListener("click", closeMobileMenu);
-
-  // Close drawer on nav click (better mobile UX)
-  document.querySelectorAll(".nav-link").forEach((link) => {
-    link.addEventListener("click", closeMobileMenu);
-  });
-</script>
+<button
+  type="button"
+  id="sidebar-overlay"
+  class="sidebar-overlay"
+  aria-label="Close menu"
+></button>
 
 <style>
   /* ============================================================================
@@ -134,6 +134,10 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
+  }
+
+  .mobile-close {
+    display: none;
   }
 
   .logo {
@@ -171,32 +175,62 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     padding: var(--space-md) var(--space-lg);
     color: var(--color-text-secondary);
+    font-weight: 500;
     text-decoration: none;
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
     position: relative;
     white-space: nowrap;
+    isolation: isolate;
+    z-index: 0;
   }
 
   .nav-link:hover {
-    background-color: var(--color-bg-secondary);
     color: var(--color-text);
   }
 
   /* ===== Active State ===== */
   .nav-link.active {
-    color: var(--color-accent);
-    background-color: var(--color-bg-secondary);
-    font-weight: 600; /* ← Makes text bolder */
+    color: var(--color-text);
   }
 
-  .nav-link.active::before {
+  .nav-bubble {
+    display: block;
+    position: absolute;
+    inset: 0.42rem 0.72rem;
+    border-radius: 999px;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, white 16%, var(--color-card-bg)),
+        color-mix(in srgb, var(--color-accent) 10%, var(--color-card-bg))
+      );
+    border: 1px solid color-mix(in srgb, var(--color-accent) 24%, var(--color-border));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.32),
+      inset 0 -1px 0 rgba(12, 71, 165, 0.05),
+      0 6px 18px rgba(12, 71, 165, 0.08);
+    z-index: 0;
+    backface-visibility: hidden;
+    contain: paint;
+    overflow: hidden;
+  }
+
+  .nav-bubble::before {
     content: "";
     position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-color: var(--color-accent);
+    inset: 1px;
+    border-radius: inherit;
+    background:
+      linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0.28) 0%,
+        rgba(255, 255, 255, 0.12) 22%,
+        rgba(255, 255, 255, 0.04) 42%,
+        transparent 62%
+      );
+    pointer-events: none;
   }
 
   /* ===== Navigation Icon & Label ===== */
@@ -205,12 +239,44 @@ const currentPath = Astro.url.pathname;
     height: 20px;
     margin-right: var(--space-md);
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
   }
 
   .nav-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-link:hover:not(.active) {
+    background-color: color-mix(in srgb, var(--color-bg-secondary) 70%, transparent);
+  }
+
+  @keyframes nav-bubble-in {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(0.985);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes nav-bubble-out {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(0.985);
+    }
   }
 
   /* ============================================================================
@@ -228,10 +294,6 @@ const currentPath = Astro.url.pathname;
      ========================================================================= */
 
   /* ===== Mobile Menu Toggle Button ===== */
-  .mobile-menu-toggle {
-    display: none;
-  }
-
   /* ===== Mobile Overlay (backdrop) ===== */
   .sidebar-overlay {
     display: none;
@@ -241,43 +303,92 @@ const currentPath = Astro.url.pathname;
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
+    border: 0;
     z-index: 999;
     opacity: 0;
-    transition: opacity var(--transition-base);
+    transition: opacity 180ms ease;
   }
 
   @media (max-width: 768px) {
     /* ===== Hide sidebar off-screen by default ===== */
     .sidebar {
-      transform: translateX(-100%);
-      transition: transform var(--transition-base);
+      width: min(86vw, 22rem);
+      border-right: none;
+      border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+      transform: translate3d(-104%, 0, 0);
+      opacity: 0.98;
+      will-change: transform;
+      transition:
+        transform 280ms var(--ease-smooth),
+        opacity 180ms ease;
     }
 
     /* ===== Show sidebar when mobile-open ===== */
     .sidebar.mobile-open {
-      transform: translateX(0);
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
     }
 
-    /* ===== Show mobile menu toggle button ===== */
-    .mobile-menu-toggle {
-      display: flex;
+    .sidebar-header {
+      padding-bottom: var(--space-md);
+      border-bottom: none;
+    }
+
+    .mobile-close {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      position: fixed;
-      top: var(--space-md);
-      left: var(--space-md);
-      background-color: var(--color-card-bg);
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 999px;
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      cursor: pointer;
+      background-color: var(--color-bg-secondary);
       color: var(--color-text);
-      width: 40px;
-      height: 40px;
-      z-index: 999;
-      transition: background-color var(--transition-fast);
+      cursor: pointer;
+      transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
     }
 
-    .mobile-menu-toggle:hover {
+    .mobile-close:hover {
+      background-color: var(--color-card-bg);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .sidebar-nav {
+      padding: var(--space-md);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .sidebar-nav ul {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .nav-bubble {
+      display: none;
+    }
+
+    .nav-link {
+      min-height: 3.25rem;
+      padding: 0 var(--space-lg);
+      border: 1px solid transparent;
+      border-radius: var(--radius-lg);
+      background-color: transparent;
+    }
+
+    .nav-link.active {
+      background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-card-bg));
+      border-color: color-mix(in srgb, var(--color-accent) 22%, var(--color-border));
+      color: var(--color-text);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+
+    .nav-link:hover:not(.active) {
       background-color: var(--color-bg-secondary);
     }
 

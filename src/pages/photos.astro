@@ -1,8 +1,8 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../components/layout/MainLayout.astro";
+import { getPhotosCollection } from "../lib/content/photos";
 
-const photos = await getCollection("photos");
+const photos = await getPhotosCollection();
 const sortedPhotos = photos.sort(
 	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
@@ -21,8 +21,13 @@ const sortedPhotos = photos.sort(
     {sortedPhotos.length > 0 ? (
       <div class="photo-grid content-wide">
         {sortedPhotos.map((photo) => (
-          <a href={`/photos/${photo.slug}`} class="photo-item">
-            <img src={photo.data.image} alt={photo.data.title} loading="lazy" />
+          <a href={`/photos/${photo.id}`} class="photo-item">
+            <img
+              src={photo.data.image}
+              alt={photo.data.title}
+              loading="lazy"
+              decoding="async"
+            />
             <div class="photo-overlay">
               <h3>{photo.data.title}</h3>
               {photo.data.location && (
@@ -41,4 +46,16 @@ const sortedPhotos = photos.sort(
 </MainLayout>
 
 <style>
+  .photo-item {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background-color: var(--color-bg-secondary);
+  }
+
+  .photo-item img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
 </style>

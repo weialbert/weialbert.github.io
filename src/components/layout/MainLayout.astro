@@ -13,20 +13,135 @@ interface Props {
 ---
 
 <BaseLayout {...Astro.props}>
-  <div class="app-container">
+  <div class="app-container" transition:animate="none">
     <Sidebar />
     
-    <div class="main-wrapper">
+    <div class="main-wrapper" transition:animate="none">
       <Header />
       
-      <main id="main-content" class="main-content">
+      <main
+        id="main-content"
+        class="main-content"
+        transition:name="page-content"
+        transition:animate={{
+          forwards: {
+            old: { name: "page-content-out", duration: "120ms", easing: "ease-in" },
+            new: {
+              name: "page-content-in",
+              duration: "220ms",
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              delay: "20ms",
+            },
+          },
+          backwards: {
+            old: { name: "page-content-back-out", duration: "100ms", easing: "ease-in" },
+            new: {
+              name: "page-content-back-in",
+              duration: "180ms",
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              delay: "10ms",
+            },
+          },
+        }}
+      >
         <slot />
       </main>
     </div>
     
     <Footer />
   </div>
-  
+  <script is:inline>
+    if (!window.__mainLayoutControllerInitialized) {
+      window.__mainLayoutControllerInitialized = true;
+
+      const mobileMediaQuery = window.matchMedia("(max-width: 768px)");
+
+      function getLayoutElements() {
+        return {
+          sidebar: document.getElementById("sidebar"),
+          overlay: document.getElementById("sidebar-overlay"),
+          mobileToggle: document.querySelector("[data-mobile-menu-toggle]"),
+        };
+      }
+
+      function setMobileMenuState(isOpen) {
+        const { sidebar, overlay, mobileToggle } = getLayoutElements();
+        if (!sidebar || !overlay) return;
+
+        sidebar.classList.toggle("mobile-open", isOpen);
+        overlay.classList.toggle("active", isOpen);
+        document.body.classList.toggle("menu-open", isOpen);
+        mobileToggle?.setAttribute("aria-expanded", String(isOpen));
+
+        if (mobileMediaQuery.matches) {
+          sidebar.setAttribute("aria-hidden", String(!isOpen));
+          return;
+        }
+
+        sidebar.removeAttribute("aria-hidden");
+      }
+
+      function closeMobileMenu() {
+        setMobileMenuState(false);
+      }
+
+      function syncMobileMenuAccessibility() {
+        const { sidebar, mobileToggle } = getLayoutElements();
+        if (!sidebar) return;
+
+        const isOpen = sidebar.classList.contains("mobile-open");
+        document.body.classList.toggle(
+          "menu-open",
+          mobileMediaQuery.matches && isOpen,
+        );
+        mobileToggle?.setAttribute("aria-expanded", String(isOpen));
+
+        if (mobileMediaQuery.matches) {
+          sidebar.setAttribute("aria-hidden", String(!isOpen));
+        } else {
+          sidebar.removeAttribute("aria-hidden");
+        }
+      }
+
+      document.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return;
+
+        if (event.target.closest("[data-mobile-menu-toggle]")) {
+          const { sidebar } = getLayoutElements();
+          if (!sidebar) return;
+          setMobileMenuState(!sidebar.classList.contains("mobile-open"));
+          return;
+        }
+
+        if (
+          event.target.closest("[data-mobile-menu-close]") ||
+          event.target.closest("#sidebar-overlay") ||
+          event.target.closest(".nav-link")
+        ) {
+          closeMobileMenu();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeMobileMenu();
+        }
+      });
+
+      mobileMediaQuery.addEventListener("change", (event) => {
+        if (!event.matches) {
+          closeMobileMenu();
+        }
+
+        syncMobileMenuAccessibility();
+      });
+
+      document.addEventListener("astro:before-preparation", closeMobileMenu);
+      document.addEventListener("astro:page-load", syncMobileMenuAccessibility);
+
+      syncMobileMenuAccessibility();
+    }
+  </script>
 </BaseLayout>
 
 <style>
@@ -49,9 +164,14 @@ interface Props {
     max-width: var(--content-wide);
     margin: 0 auto;
     width: 100%;
+    isolation: isolate;
   }
   
   @media (max-width: 768px) {
+    :global(body.menu-open) {
+      overflow: hidden;
+    }
+
     .main-wrapper {
       margin-left: 0;
     }

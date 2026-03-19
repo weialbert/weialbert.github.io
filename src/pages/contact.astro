@@ -88,7 +88,10 @@ const { personal } = getResumeData();
     border-radius: var(--radius-md);
     text-decoration: none;
     color: inherit;
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
   }
 
   .contact-link:hover {

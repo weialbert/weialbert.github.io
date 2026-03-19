@@ -1,11 +1,8 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../components/layout/MainLayout.astro";
+import { getPublishedProjects } from "../lib/content/projects";
 
-const projects = await getCollection("projects");
-const sortedProjects = projects
-	.filter((project) => !project.data.draft)
-	.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+const sortedProjects = await getPublishedProjects();
 ---
 
 <MainLayout 
@@ -53,7 +50,8 @@ const sortedProjects = projects
                   <img 
                     src={project.data.image} 
                     alt={project.data.title}
-                    onerror="this.parentElement.remove()"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               )}
@@ -120,8 +118,9 @@ const sortedProjects = projects
 
   .project-image {
     width: 100%;
-    height: 220px;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
+    background-color: var(--color-bg-secondary);
   }
 
   .project-image img {

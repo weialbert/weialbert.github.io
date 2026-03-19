@@ -1,13 +1,15 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
+import DetailPage from "../../components/content/DetailPage.astro";
 import MainLayout from "../../components/layout/MainLayout.astro";
+import { formatBlogDate, getPublishedBlogPosts } from "../../lib/content/blog";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { id: post.id },
-    props: { post },
-  }));
+	const posts = await getPublishedBlogPosts();
+	return posts.map((post) => ({
+		params: { id: post.id },
+		props: { post },
+	}));
 }
 
 const { post } = Astro.props;
@@ -20,39 +22,39 @@ const { Content, headings } = await render(post);
   image={post.data.image}
   type="article"
 >
-  <article class="blog-post">
-    <a href="/blog" class="back-link">← Back to Blog</a>
+  <DetailPage backHref="/blog" backLabel="Back to Blog" maxWidth="800px">
+    <Fragment slot="header">
+      <div class="post-header">
+        <h1>{post.data.title}</h1>
 
-    <header class="post-header">
-      <h1>{post.data.title}</h1>
+        <div class="post-meta">
+          <time datetime={post.data.publishDate.toISOString()}>
+            {formatBlogDate(post.data.publishDate)}
+          </time>
+        </div>
 
-      <div class="post-meta">
-        <time datetime={post.data.publishDate.toISOString()}>
+        <div class="post-tags">
           {
-            post.data.publishDate.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
+            post.data.tags.map((tag) => (
+              <a href={`/blog/tags/${tag}`} class="tag">
+                {tag}
+              </a>
+            ))
           }
-        </time>
+        </div>
       </div>
-
-      <div class="post-tags">
-        {
-          post.data.tags.map((tag) => (
-            <a href={`/blog/tags/${tag}`} class="tag">
-              {tag}
-            </a>
-          ))
-        }
-      </div>
-    </header>
+    </Fragment>
 
     {
       post.data.image && (
-        <div class="post-hero-image">
-          <img src={post.data.image} alt={post.data.title} />
+        <div slot="hero">
+          <img
+            src={post.data.image}
+            alt={post.data.title}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
         </div>
       )
     }
@@ -76,7 +78,7 @@ const { Content, headings } = await render(post);
       <Content />
     </div>
 
-    <footer class="post-footer">
+    <div slot="footer" class="post-footer">
       <div class="share-section">
         <h3>Share this post</h3>
         <div class="share-buttons">
@@ -98,31 +100,10 @@ const { Content, headings } = await render(post);
       </div>
 
       <a href="/blog" class="back-to-blog">← Back to all posts</a>
-    </footer>
-  </article>
+    </div>
+  </DetailPage>
 </MainLayout>
 <style>
-  .blog-post {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .back-link {
-    display: inline-block;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    margin-bottom: var(--space-xl);
-    transition: color var(--transition-fast);
-  }
-
-  .back-link:hover {
-    color: var(--color-accent);
-  }
-
-  .post-header {
-    margin-bottom: var(--space-2xl);
-  }
-
   .post-header h1 {
     font-size: var(--text-4xl);
     line-height: 1.2;
@@ -134,10 +115,6 @@ const { Content, headings } = await render(post);
     gap: var(--space-md);
     color: var(--color-text-secondary);
     margin-bottom: var(--space-lg);
-  }
-
-  .separator {
-    color: var(--color-border);
   }
 
   .post-tags {
@@ -153,23 +130,14 @@ const { Content, headings } = await render(post);
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
     text-decoration: none;
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
   }
 
   .tag:hover {
     background-color: var(--color-accent);
     color: white;
-  }
-
-  .post-hero-image {
-    margin-bottom: var(--space-2xl);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  .post-hero-image img {
-    width: 100%;
-    height: auto;
   }
 
   .toc {
@@ -210,72 +178,11 @@ const { Content, headings } = await render(post);
     padding-left: calc(var(--space-lg) * 2);
   }
 
-  .post-content {
-    line-height: 1.8;
-  }
-
-  .post-content :global(h2) {
-    margin-top: var(--space-2xl);
-    margin-bottom: var(--space-lg);
-    font-size: var(--text-2xl);
-  }
-
-  .post-content :global(h3) {
-    margin-top: var(--space-xl);
-    margin-bottom: var(--space-md);
-    font-size: var(--text-xl);
-  }
-
-  .post-content :global(p) {
-    margin-bottom: var(--space-lg);
-    color: var(--color-text-secondary);
-  }
-
-  .post-content :global(ul),
-  .post-content :global(ol) {
-    margin-bottom: var(--space-lg);
-    padding-left: var(--space-xl);
-  }
-
-  .post-content :global(li) {
-    margin-bottom: var(--space-sm);
-    color: var(--color-text-secondary);
-  }
-
   .post-content :global(blockquote) {
     border-left: 4px solid var(--color-accent);
     padding-left: var(--space-lg);
     margin: var(--space-lg) 0;
     color: var(--color-text-secondary);
-  }
-
-  .post-content :global(code) {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-  }
-
-  .post-content :global(pre) {
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-lg);
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    margin: var(--space-lg) 0;
-  }
-
-  .post-content :global(pre code) {
-    background-color: transparent;
-    padding: 0;
-    border-radius: 0;
-  }
-
-  .post-content :global(img) {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius-md);
-    margin: var(--space-xl) 0;
   }
 
   .post-content :global(a) {
@@ -287,12 +194,6 @@ const { Content, headings } = await render(post);
   .post-content :global(a:hover) {
     color: var(--color-accent-hover);
     text-decoration: underline;
-  }
-
-  .post-footer {
-    margin-top: var(--space-3xl);
-    padding-top: var(--space-2xl);
-    border-top: 1px solid var(--color-border);
   }
 
   .share-section {
@@ -316,7 +217,10 @@ const { Content, headings } = await render(post);
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--color-text);
-    transition: all var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
   }
 
   .share-buttons a:hover {

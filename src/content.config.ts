@@ -40,6 +40,7 @@ const photos = defineCollection({
 		tags: z.array(z.string()),
 		image: z.string(),
 		featured: z.boolean().default(false),
+		draft: z.boolean().default(false),
 	}),
 });
 

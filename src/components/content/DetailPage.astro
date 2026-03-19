@@ -1,0 +1,150 @@
+---
+interface Props {
+	backHref: string;
+	backLabel: string;
+	maxWidth?: string;
+}
+
+const { backHref, backLabel, maxWidth = "800px" } = Astro.props;
+const hasHero = Astro.slots.has("hero");
+const hasFooter = Astro.slots.has("footer");
+---
+
+<article class="detail-page" style={`--detail-page-max-width: ${maxWidth};`}>
+  <a href={backHref} class="detail-page__back-link">← {backLabel}</a>
+
+  <header class="detail-page__header">
+    <slot name="header" />
+  </header>
+
+  {hasHero && (
+    <div class="detail-page__hero">
+      <slot name="hero" />
+    </div>
+  )}
+
+  <div class="detail-page__body">
+    <slot />
+  </div>
+
+  {hasFooter && (
+    <footer class="detail-page__footer">
+      <slot name="footer" />
+    </footer>
+  )}
+</article>
+
+<style>
+  .detail-page {
+    max-width: var(--detail-page-max-width);
+    margin: 0 auto;
+  }
+
+  .detail-page__back-link {
+    display: inline-block;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    margin-bottom: var(--space-xl);
+    transition: color var(--transition-fast);
+  }
+
+  .detail-page__back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .detail-page__header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .detail-page__hero {
+    aspect-ratio: 16 / 9;
+    margin-bottom: var(--space-2xl);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--color-bg-secondary);
+  }
+
+  .detail-page__hero :global(img) {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .detail-page__body {
+    line-height: 1.8;
+  }
+
+  .detail-page__body :global(h2) {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-lg);
+    font-size: var(--text-2xl);
+  }
+
+  .detail-page__body :global(h3) {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    font-size: var(--text-xl);
+  }
+
+  .detail-page__body :global(p) {
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-secondary);
+  }
+
+  .detail-page__body :global(ul),
+  .detail-page__body :global(ol) {
+    margin-bottom: var(--space-lg);
+    padding-left: var(--space-xl);
+  }
+
+  .detail-page__body :global(li) {
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .detail-page__body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin: var(--space-xl) 0;
+  }
+
+  .detail-page__body :global(pre) {
+    background-color: var(--color-bg-secondary);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin: var(--space-lg) 0;
+  }
+
+  .detail-page__body :global(code) {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    background-color: var(--color-bg-secondary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .detail-page__body :global(pre code) {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .detail-page__footer {
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 768px) {
+    .detail-page__header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .detail-page__hero {
+      margin-bottom: var(--space-xl);
+    }
+  }
+</style>

@@ -24,15 +24,12 @@
 </button>
 
 <script>
-  import { initTheme, setTheme } from '../lib/theme/theme';
-  
-  // Initialize theme on page load
-  initTheme();
+  import { resolveTheme, setTheme } from '../lib/theme/theme';
   
   // Toggle theme on button click
   const toggle = document.getElementById('theme-toggle');
   toggle?.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
+    const current = resolveTheme();
     const next = current === 'light' ? 'dark' : 'light';
     setTheme(next);
   });

@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from "astro:transitions";
+import { resolveThemeValue, THEME_STORAGE_KEY } from "../lib/theme/theme";
 import "../assets/styles/global.css";
 
 interface Props {
@@ -16,6 +18,20 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const resolveThemeValueSource = resolveThemeValue.toString();
+const themeBootScript = `
+try {
+  const THEME_STORAGE_KEY = ${JSON.stringify(THEME_STORAGE_KEY)};
+  const resolveThemeValue = ${resolveThemeValueSource};
+  const stored = localStorage.getItem(THEME_STORAGE_KEY);
+  const theme = resolveThemeValue(
+    stored,
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
+  document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.style.colorScheme = theme;
+} catch {}
+`;
 ---
 
 <!DOCTYPE html>
@@ -38,11 +54,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:image" content={new URL(image, Astro.site)} />
     
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter fallback="animate" />
     
-    <script is:inline>
-      const stored = localStorage.getItem('theme');
-      const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
+    <script is:inline set:html={themeBootScript}></script>
+    <script>
+      import { initThemeController } from "../lib/theme/theme";
+
+      initThemeController();
     </script>
   </head>
   <body>
