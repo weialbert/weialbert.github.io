@@ -25,8 +25,8 @@
   /* ===== Mobile-only Header ===== */
   .header {
     display: none;
-    background-color: var(--color-card-bg);
-    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-edge-surface);
+    border-bottom: 1px solid var(--color-edge-separator);
     padding:
       calc(0.55rem + env(safe-area-inset-top, 0px))
       var(--space-lg)
@@ -63,8 +63,8 @@
     background:
       linear-gradient(
         180deg,
-        color-mix(in srgb, white 10%, var(--color-card-bg)),
-        color-mix(in srgb, var(--color-bg-secondary) 78%, var(--color-card-bg))
+        color-mix(in srgb, white 10%, var(--color-edge-surface)),
+        color-mix(in srgb, var(--color-bg-secondary) 78%, var(--color-edge-surface))
       );
     border: 1px solid color-mix(in srgb, var(--color-border) 88%, transparent);
     cursor: pointer;
@@ -98,7 +98,7 @@
     background:
       linear-gradient(
         180deg,
-        color-mix(in srgb, var(--color-accent) 12%, var(--color-card-bg)),
+        color-mix(in srgb, var(--color-accent) 12%, var(--color-edge-surface)),
         color-mix(in srgb, var(--color-accent) 8%, var(--color-bg-secondary))
       );
     border-color: color-mix(in srgb, var(--color-accent) 24%, var(--color-border));

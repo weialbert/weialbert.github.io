@@ -12,6 +12,9 @@
 	--color-accent-hover: #0a3682;
 	--color-border: #e5e5e5;
 	--color-card-bg: #ffffff;
+	--color-edge-surface: var(--color-card-bg);
+	--color-edge-separator: var(--color-border);
+	--edge-overscroll-bleed: 100vh;
 
 	/* ===== Spacing Scale ===== */
 	--space-xs: 0.25rem; /* 4px */
@@ -81,6 +84,8 @@
 	--color-accent-hover: #a5f3fc;
 	--color-border: #334155;
 	--color-card-bg: #1e293b;
+	--color-edge-surface: var(--color-card-bg);
+	--color-edge-separator: var(--color-border);
 
 	--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
 	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
@@ -96,11 +101,12 @@
 
 html {
 	scroll-behavior: auto;
+	background-color: var(--color-edge-surface);
 }
 
 body {
 	font-family: var(--font-sans);
-	background-color: var(--color-bg);
+	background-color: var(--color-edge-surface);
 	color: var(--color-text);
 	line-height: 1.6;
 	transition:
