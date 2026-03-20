@@ -71,6 +71,15 @@ export function initThemeController(): void {
 		syncTheme();
 	});
 
+	document.addEventListener("click", (event) => {
+		if (!(event.target instanceof Element)) return;
+		if (!event.target.closest("#theme-toggle")) return;
+
+		const current = resolveTheme();
+		const next = current === "light" ? "dark" : "light";
+		setTheme(next);
+	});
+
 	document.addEventListener("astro:before-swap", (event) => {
 		if (!("newDocument" in event) || !(event.newDocument instanceof Document))
 			return;

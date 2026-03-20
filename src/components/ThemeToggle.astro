@@ -23,18 +23,6 @@
   </svg>
 </button>
 
-<script>
-  import { resolveTheme, setTheme } from '../lib/theme/theme';
-  
-  // Toggle theme on button click
-  const toggle = document.getElementById('theme-toggle');
-  toggle?.addEventListener('click', () => {
-    const current = resolveTheme();
-    const next = current === 'light' ? 'dark' : 'light';
-    setTheme(next);
-  });
-</script>
-
 <style>
   .theme-toggle {
     background: transparent;

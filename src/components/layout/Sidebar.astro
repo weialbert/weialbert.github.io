@@ -1,33 +1,6 @@
 ---
 import ThemeToggle from "../ThemeToggle.astro";
 
-const navBubbleTransition = {
-	forwards: {
-		old: {
-			name: "nav-bubble-out",
-			duration: "240ms",
-			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-		},
-		new: {
-			name: "nav-bubble-in",
-			duration: "240ms",
-			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-		},
-	},
-	backwards: {
-		old: {
-			name: "nav-bubble-out",
-			duration: "240ms",
-			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-		},
-		new: {
-			name: "nav-bubble-in",
-			duration: "240ms",
-			easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-		},
-	},
-};
-
 const navItems = [
 	{ href: "/", label: "Home", icon: "home" },
 	{ href: "/about", label: "About", icon: "user" },
@@ -46,7 +19,7 @@ const isActivePath = (href: string) =>
 <aside id="sidebar" class="sidebar" transition:animate="none">
   <div class="sidebar-header">
     <a href="/" class="logo">
-      <span class="logo-text">Albert Wei</span>
+      <span>Albert Wei</span>
     </a>
 
     <button
@@ -66,7 +39,7 @@ const isActivePath = (href: string) =>
     <ul>
       {
         navItems.map((item) => (
-          <li class="nav-item">
+          <li>
             <a
               href={item.href}
               class:list={[
@@ -75,18 +48,20 @@ const isActivePath = (href: string) =>
                   active: isActivePath(item.href),
                 },
               ]}
+              transition:animate="none"
               aria-current={isActivePath(item.href) ? "page" : undefined}
             >
               {isActivePath(item.href) && (
                 <span
                   class="nav-bubble"
                   transition:name="desktop-nav-bubble"
-                  transition:animate={navBubbleTransition}
                   aria-hidden="true"
                 />
               )}
-              <span class="nav-icon" data-icon={item.icon} />
-              <span class="nav-label">{item.label}</span>
+              <span class="nav-content" transition:animate="none">
+                <span class="nav-icon" data-icon={item.icon} />
+                <span class="nav-label">{item.label}</span>
+              </span>
             </a>
           </li>
         ))
@@ -234,49 +209,25 @@ const isActivePath = (href: string) =>
   }
 
   /* ===== Navigation Icon & Label ===== */
+  .nav-content {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+
   .nav-icon {
     width: 20px;
     height: 20px;
     margin-right: var(--space-md);
     flex-shrink: 0;
-    position: relative;
-    z-index: 1;
   }
 
   .nav-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    position: relative;
-    z-index: 1;
-  }
-
-  .nav-link:hover:not(.active) {
-    background-color: color-mix(in srgb, var(--color-bg-secondary) 70%, transparent);
-  }
-
-  @keyframes nav-bubble-in {
-    from {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(0.985);
-    }
-
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-  }
-
-  @keyframes nav-bubble-out {
-    from {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(0.985);
-    }
   }
 
   /* ============================================================================
@@ -296,77 +247,111 @@ const isActivePath = (href: string) =>
   /* ===== Mobile Menu Toggle Button ===== */
   /* ===== Mobile Overlay (backdrop) ===== */
   .sidebar-overlay {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(15, 23, 42, 0.16),
+        rgba(15, 23, 42, 0.32)
+      );
     border: 0;
     z-index: 999;
     opacity: 0;
-    transition: opacity 180ms ease;
+    pointer-events: none;
+    transition:
+      opacity 220ms ease,
+      visibility 220ms ease;
+    visibility: hidden;
   }
 
   @media (max-width: 768px) {
     /* ===== Hide sidebar off-screen by default ===== */
     .sidebar {
-      width: min(86vw, 22rem);
+      width: min(88vw, 22.5rem);
       border-right: none;
-      border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
-      transform: translate3d(-104%, 0, 0);
-      opacity: 0.98;
+      border-radius: 0 1.4rem 1.4rem 0;
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, white 9%, var(--color-card-bg)),
+          var(--color-card-bg)
+        );
+      box-shadow:
+        0 28px 80px rgba(15, 23, 42, 0.22),
+        0 8px 24px rgba(15, 23, 42, 0.08);
+      transform: translate3d(-101%, 0, 0) scale(0.985);
+      opacity: 0;
       will-change: transform;
       transition:
-        transform 280ms var(--ease-smooth),
+        transform 240ms var(--ease-smooth),
         opacity 180ms ease;
     }
 
     /* ===== Show sidebar when mobile-open ===== */
     .sidebar.mobile-open {
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0) scale(1);
       opacity: 1;
     }
 
     .sidebar-header {
-      padding-bottom: var(--space-md);
-      border-bottom: none;
+      padding: 1rem 1rem 0.75rem 1.1rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--color-border) 82%, transparent);
+      opacity: 0.86;
+      transform: translate3d(0, 0.45rem, 0);
+      transition:
+        opacity 180ms ease,
+        transform 240ms var(--ease-smooth);
     }
 
     .mobile-close {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2.25rem;
-      height: 2.25rem;
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: 999px;
-      border: 1px solid var(--color-border);
-      background-color: var(--color-bg-secondary);
+      border: 1px solid color-mix(in srgb, var(--color-border) 84%, transparent);
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, white 8%, var(--color-card-bg)),
+          color-mix(in srgb, var(--color-bg-secondary) 80%, var(--color-card-bg))
+        );
       color: var(--color-text);
       cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
       transition:
         color var(--transition-fast),
         background-color var(--transition-fast),
-        border-color var(--transition-fast);
+        border-color var(--transition-fast),
+        transform var(--transition-fast);
     }
 
     .mobile-close:hover {
       background-color: var(--color-card-bg);
       border-color: var(--color-accent);
       color: var(--color-accent);
+      transform: translate3d(0, -1px, 0);
     }
 
     .sidebar-nav {
-      padding: var(--space-md);
-      border-top: 1px solid var(--color-border);
+      padding: 0.9rem;
+      border-top: none;
+      opacity: 0.88;
+      transform: translate3d(0, 0.65rem, 0);
+      transition:
+        opacity 200ms ease,
+        transform 240ms var(--ease-smooth);
     }
 
     .sidebar-nav ul {
       display: flex;
       flex-direction: column;
-      gap: var(--space-sm);
+      gap: 0.55rem;
     }
 
     .nav-bubble {
@@ -374,28 +359,71 @@ const isActivePath = (href: string) =>
     }
 
     .nav-link {
-      min-height: 3.25rem;
-      padding: 0 var(--space-lg);
+      min-height: 3.5rem;
+      padding: 0 1rem;
       border: 1px solid transparent;
-      border-radius: var(--radius-lg);
+      border-radius: 1rem;
       background-color: transparent;
+      transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
     }
 
     .nav-link.active {
-      background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-card-bg));
-      border-color: color-mix(in srgb, var(--color-accent) 22%, var(--color-border));
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, white 6%, color-mix(in srgb, var(--color-accent) 12%, var(--color-card-bg))),
+          color-mix(in srgb, var(--color-accent) 12%, var(--color-card-bg))
+        );
+      border-color: color-mix(in srgb, var(--color-accent) 24%, var(--color-border));
       color: var(--color-text);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 10px 18px rgba(12, 71, 165, 0.08);
     }
 
     .nav-link:hover:not(.active) {
-      background-color: var(--color-bg-secondary);
+      background-color: color-mix(in srgb, var(--color-bg-secondary) 86%, transparent);
+      border-color: color-mix(in srgb, var(--color-border) 82%, transparent);
+      color: var(--color-text);
+      transform: translate3d(0, -1px, 0);
+    }
+
+    .nav-content {
+      width: 100%;
+      gap: 0.9rem;
+    }
+
+    .nav-icon {
+      margin-right: 0;
+    }
+
+    .sidebar-footer {
+      padding: 0.9rem 1rem 1rem;
+      border-top: 1px solid color-mix(in srgb, var(--color-border) 82%, transparent);
+      opacity: 0.82;
+      transform: translate3d(0, 0.8rem, 0);
+      transition:
+        opacity 220ms ease,
+        transform 260ms var(--ease-smooth);
     }
 
     /* ===== Show overlay when active ===== */
-    .sidebar-overlay.active {
-      display: block;
+    .sidebar.mobile-open .sidebar-header,
+    .sidebar.mobile-open .sidebar-nav,
+    .sidebar.mobile-open .sidebar-footer {
       opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .sidebar-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
     }
   }
 </style>
