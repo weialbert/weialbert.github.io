@@ -14,9 +14,7 @@ interface Props {
 
 <BaseLayout {...Astro.props}>
   <div class="app-container" transition:animate="none">
-    <div transition:persist="app-sidebar">
-      <Sidebar />
-    </div>
+    <Sidebar />
     
     <div class="main-wrapper" transition:animate="none">
       <div transition:persist="app-header">
