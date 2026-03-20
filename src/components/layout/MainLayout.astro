@@ -17,7 +17,9 @@ interface Props {
     <Sidebar />
     
     <div class="main-wrapper" transition:animate="none">
-      <Header />
+      <div transition:persist="app-header">
+        <Header />
+      </div>
       
       <main
         id="main-content"
@@ -48,13 +50,16 @@ interface Props {
       </main>
     </div>
     
-    <Footer />
+    <div transition:persist="app-footer">
+      <Footer />
+    </div>
   </div>
   <script is:inline>
     if (!window.__mainLayoutControllerInitialized) {
       window.__mainLayoutControllerInitialized = true;
 
       const mobileMediaQuery = window.matchMedia("(max-width: 768px)");
+      let lastToggle = null;
 
       function getLayoutElements() {
         return {
@@ -70,15 +75,37 @@ interface Props {
 
         sidebar.classList.toggle("mobile-open", isOpen);
         overlay.classList.toggle("active", isOpen);
-        document.body.classList.toggle("menu-open", isOpen);
+        document.body.classList.toggle("menu-open", mobileMediaQuery.matches && isOpen);
         mobileToggle?.setAttribute("aria-expanded", String(isOpen));
+        mobileToggle?.setAttribute(
+          "aria-label",
+          isOpen ? "Close menu" : "Open menu",
+        );
+        overlay.setAttribute("aria-hidden", String(!isOpen));
 
         if (mobileMediaQuery.matches) {
           sidebar.setAttribute("aria-hidden", String(!isOpen));
+        } else {
+          sidebar.removeAttribute("aria-hidden");
+        }
+
+        if (!mobileMediaQuery.matches) return;
+
+        if (isOpen) {
+          lastToggle = mobileToggle instanceof HTMLElement ? mobileToggle : null;
+          const closeButton = sidebar.querySelector("[data-mobile-menu-close]");
+          if (closeButton instanceof HTMLElement) {
+            requestAnimationFrame(() => closeButton.focus());
+          }
           return;
         }
 
-        sidebar.removeAttribute("aria-hidden");
+        if (
+          document.activeElement instanceof HTMLElement &&
+          sidebar.contains(document.activeElement)
+        ) {
+          lastToggle?.focus();
+        }
       }
 
       function closeMobileMenu() {
@@ -95,6 +122,11 @@ interface Props {
           mobileMediaQuery.matches && isOpen,
         );
         mobileToggle?.setAttribute("aria-expanded", String(isOpen));
+        mobileToggle?.setAttribute(
+          "aria-label",
+          isOpen ? "Close menu" : "Open menu",
+        );
+        getLayoutElements().overlay?.setAttribute("aria-hidden", String(!isOpen));
 
         if (mobileMediaQuery.matches) {
           sidebar.setAttribute("aria-hidden", String(!isOpen));
@@ -156,6 +188,7 @@ interface Props {
     flex-direction: column;
     flex: 1;
     margin-left: var(--sidebar-width);
+    background-color: var(--color-bg);
   }
   
   .main-content {
@@ -164,7 +197,6 @@ interface Props {
     max-width: var(--content-wide);
     margin: 0 auto;
     width: 100%;
-    isolation: isolate;
   }
   
   @media (max-width: 768px) {

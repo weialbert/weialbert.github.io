@@ -1,29 +1,22 @@
----
-// Optional header for mobile or breadcrumbs
-const { title } = Astro.props;
----
-
 <header class="header">
   <div class="header-content">
     <a href="/" class="mobile-brand">Albert Wei</a>
 
     <div class="mobile-header-actions">
-      {title && <h1 class="page-title">{title}</h1>}
-
-    <button
-      type="button"
-      class="mobile-menu-toggle"
-      data-mobile-menu-toggle
-      aria-label="Open menu"
-      aria-controls="sidebar"
-      aria-expanded="false"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-      </svg>
-    </button>
+      <button
+        type="button"
+        class="mobile-menu-toggle"
+        data-mobile-menu-toggle
+        aria-label="Open menu"
+        aria-controls="sidebar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
     </div>
   </div>
 </header>
@@ -32,9 +25,12 @@ const { title } = Astro.props;
   /* ===== Mobile-only Header ===== */
   .header {
     display: none;
-    background-color: var(--color-card-bg);
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--space-md) var(--space-lg);
+    background-color: var(--color-edge-surface);
+    border-bottom: 1px solid var(--color-edge-separator);
+    padding:
+      calc(0.55rem + env(safe-area-inset-top, 0px))
+      var(--space-lg)
+      0.9rem;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -49,42 +45,63 @@ const { title } = Astro.props;
 
   .mobile-brand {
     color: var(--color-text);
-    font-size: var(--text-lg);
+    font-size: 1.02rem;
     font-weight: 700;
+    letter-spacing: 0.01em;
     text-decoration: none;
   }
 
   .mobile-header-actions {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: 0.75rem;
+    min-width: 0;
   }
   
   /* ===== Mobile Menu Toggle Button ===== */
   .mobile-menu-toggle {
-    background: transparent;
-    border: none;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, white 10%, var(--color-edge-surface)),
+        color-mix(in srgb, var(--color-bg-secondary) 78%, var(--color-edge-surface))
+      );
+    border: 1px solid color-mix(in srgb, var(--color-border) 88%, transparent);
     cursor: pointer;
-    padding: var(--space-sm);
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
     color: var(--color-text);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color var(--transition-fast);
+    flex-shrink: 0;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 8px 20px rgba(15, 23, 42, 0.08);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast),
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
   
   .mobile-menu-toggle:hover {
     color: var(--color-accent);
+    border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-border));
+    transform: translate3d(0, -1px, 0);
   }
-  
-  /* ===== Page Title ===== */
-  .page-title {
-    font-size: var(--text-sm);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    font-weight: 600;
-    margin: 0;
+
+  .mobile-menu-toggle[aria-expanded="true"] {
+    color: var(--color-accent);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-accent) 12%, var(--color-edge-surface)),
+        color-mix(in srgb, var(--color-accent) 8%, var(--color-bg-secondary))
+      );
+    border-color: color-mix(in srgb, var(--color-accent) 24%, var(--color-border));
   }
   
   /* ===== Show header on mobile ===== */
