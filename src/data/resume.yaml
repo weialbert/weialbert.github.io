@@ -30,14 +30,14 @@ education:
 experiences:
   - id: palantir
     company: Palantir Technologies
-    role: Data Engineer
+    role: Data Engineer (Product Data Analyst & Applications Team)
     location: New York, NY
     start: 2025
     end: present
     tags: [data-engineering, leadership]
     bullets:
       - id: p-b1
-        text: As the sole data engineer on the internal products analytics team for executive leadership, built data models, ETL pipelines, and platform infrastructure to monitor fleet-wide Foundry product usage, risk impacts, and costs.
+        text: Built data models, ETL pipelines, and platform infrastructure as the sole data engineer on the product analytics team for executive leadership, monitoring fleet-wide Foundry product usage, risk impacts, and costs
         importance: 5
         tags: [data-engineering, architecture, leadership]
 

@@ -44,8 +44,10 @@
   }
 
   filtered
-    .sorted(key: b => get(b, "importance", default: 0))
-    .rev()
+    .sorted(key: b => (
+      -get(b, "importance", default: 0),  // primary: higher importance first
+      get(b, "id", default: "")           // secondary: ascending ID
+    ))
     .slice(0, calc.min(filtered.len(), max-bullets))
 }
 
