@@ -37,29 +37,39 @@ experiences:
     tags: [data-engineering, leadership]
     bullets:
       - id: p-b1
-        text: Migrated petabyte-scale production datasets to Iceberg table format, reducing storage and query costs by 40%+ and enabling real-time read capabilities for Foundry product usage datasets (ie. cloud cost, token usage, and deployment performance)
+        text: As the sole data engineer on the internal products analytics team for executive leadership, built data models, ETL pipelines, and platform infrastructure to monitor fleet-wide Foundry product usage, risk impacts, and costs.
         importance: 5
-        tags: [data-engineering, performance]
+        tags: [data-engineering, architecture, leadership]
 
       - id: p-b2
-        text: Implemented Iceberg table generation and procedures into Foundry platform, enabling self-service dataset generation and product monitoring capabilities across 100+ product teams
+        text: Migrated petabyte-scale logging datasets to Apache Iceberg, cutting storage and query costs by 60%+ and enabling real-time visibility into cloud costs, token usage, and deployment performance across all products and environments
         importance: 5
-        tags: [data-engineering, architecture]
+        tags: [data-engineering, performance, architecture]
 
       - id: p-b3
-        text: Centralized data quality monitoring, dataset scheduling, and health check alerting fleetwide across all Foundry products and Apollo deployments
+        text: Diagnosed and resolved critical upstream Apache Iceberg capability gaps in Foundry (authoring platform source code fixes, shipping data model patterns, updating and official customer-facing documentation), establishing Iceberg tables as a first-class supported capability used by internal and external customers
         importance: 5
-        tags: [data-engineering, architecture]
+        tags: [data-engineering, architecture, open-source]
 
       - id: p-b4
-        text: Designed and maintained ingestion and load balancing pipelines for edge deployments with irregular internet connectivity, ensuring reliable data delivery and end-to-end visibility
-        importance: 4
-        tags: [data-engineering, performance]
+        text: Built and owned centralized data quality monitoring, pipeline scheduling, and health-check alerting across all Foundry products and deployment environments, providing a single source of truth for company-wide data reliability
+        importance: 5
+        tags: [data-engineering, architecture, observability]
 
       - id: p-b5
-        text: Generated executive-level product usage performance metrics used directly by CFO in quarterly earnings reports and investor communications
+        text: Produced executive stability/performance newsletters presented directly by CFO during quarterly earnings reports, translating petabyte-scale fleet wide data into source-of-truth financial, product, and operational growth metrics
         importance: 4
-        tags: [leadership, analytics]
+        tags: [analytics, leadership, data-engineering]
+
+      - id: p-b6
+        text: Designed fault-tolerant ingestion, load-balancing pipelines, and SCD data models for edge deployments operating under intermittent connectivity, guaranteeing data reliability and end-to-end observability across irregular network conditions
+        importance: 4
+        tags: [data-engineering, infrastructure, performance]
+
+      - id: p-b7
+        text: Extended language server infrastructure beyond Python and Java support in the public Palantir VS Code extension
+        tags: [data-engineering, developer-experience, full-stack]
+        importance: 3
 
   - id: capital-one
     company: Capital One
@@ -189,23 +199,28 @@ skills:
       - Rust
       - Python (pandas, numpy, scikit-learn, TensorFlow, PyTorch)
       - SQL (Snowflake, PostgreSQL, NoSQL)
-      - R
+      - Typescript (Node.js, React)
       - CI & CD (Github Actions, Jenkins)
+
   - category: "Data Engineering & Infrastructure"
     items:
+      - Apache Iceberg
       - Apache Spark, Airflow, Kafka, Hamilton
+      - dbt (data modeling, transformations)
+      - Delta Lake
       - AWS (S3, Glue, Redshift, EMR, SageMaker, Lambda, Athena)
       - Azure (Databricks, Blob Storage, Data Factory, Synapse)
       - GCP (BigQuery, Cloud Storage, Dataflow, Dataproc)
       - Docker
+
   - category: "Analytics & Visualization"
     items:
-      - Jupyter Notebooks
       - Tableau
       - Power BI
       - Statistical Regression Analysis
       - Time Series (ARIMA, Prophet)
       - A/B Testing
+
   - category: "Machine Learning & Optimization"
     items:
       - Predictive Modeling
