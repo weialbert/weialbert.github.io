@@ -248,6 +248,7 @@
 
   // Technical Skills
   if "skills" in data and data.skills.len() > 0 {
+    set text(size: 9pt)
     section("Technical Skills")
     for skill in data.skills {
       [- *#get(skill, "category", default: "")*: #get(skill, "items", default: ()).join(", ")]

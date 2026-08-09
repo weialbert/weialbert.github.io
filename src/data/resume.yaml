@@ -37,7 +37,7 @@ experiences:
     tags: [data-engineering, leadership]
     bullets:
       - id: p-b1
-        text: Built data models, ETL pipelines, and platform infrastructure as the sole data engineer on the product analytics team for executive leadership, monitoring fleet-wide Foundry product usage, risk impacts, and costs
+        text: Built all data pipelining for reconciling company-wide token usage and cost with billed amounts, including deeper visibility into individual product/user LLM usage, cost saving opportunities, hyperscaler billing mistakes, logging infrastructure gaps, and model sovereignty metrics
         importance: 5
         tags: [data-engineering, architecture, leadership]
 
@@ -228,6 +228,11 @@ skills:
       - Anomaly Detection & Variance Testing
       - Linear & Nonlinear Optimization
       - Operations Research
+  
+  - category: "Security Clearance"
+    items:
+      - US and NATO Top Secret Clearance (Active)
+      
 # projects:
 #   - id: citywatch
 #     name: CityWatch Incident Tracker
